@@ -3,3 +3,5 @@
 ################################################################################
 
 /TimeTracker/.vs/TimeTracker
+/TimeTracker/TimeTracker/Client/bin/Debug/netstandard2.1
+/TimeTracker/TimeTracker/Shared/bin/Debug/netstandard2.1
