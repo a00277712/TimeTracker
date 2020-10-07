@@ -1,8 +1,0 @@
-C:\Users\stewartlocke\Desktop\Software Project\TimeTracker\TimeTracker\TimeTracker\Shared\bin\Debug\netstandard2.1\TimeTracker.Shared.deps.json
-C:\Users\stewartlocke\Desktop\Software Project\TimeTracker\TimeTracker\TimeTracker\Shared\bin\Debug\netstandard2.1\TimeTracker.Shared.dll
-C:\Users\stewartlocke\Desktop\Software Project\TimeTracker\TimeTracker\TimeTracker\Shared\bin\Debug\netstandard2.1\TimeTracker.Shared.pdb
-C:\Users\stewartlocke\Desktop\Software Project\TimeTracker\TimeTracker\TimeTracker\Shared\obj\Debug\netstandard2.1\TimeTracker.Shared.csprojAssemblyReference.cache
-C:\Users\stewartlocke\Desktop\Software Project\TimeTracker\TimeTracker\TimeTracker\Shared\obj\Debug\netstandard2.1\TimeTracker.Shared.AssemblyInfoInputs.cache
-C:\Users\stewartlocke\Desktop\Software Project\TimeTracker\TimeTracker\TimeTracker\Shared\obj\Debug\netstandard2.1\TimeTracker.Shared.AssemblyInfo.cs
-C:\Users\stewartlocke\Desktop\Software Project\TimeTracker\TimeTracker\TimeTracker\Shared\obj\Debug\netstandard2.1\TimeTracker.Shared.dll
-C:\Users\stewartlocke\Desktop\Software Project\TimeTracker\TimeTracker\TimeTracker\Shared\obj\Debug\netstandard2.1\TimeTracker.Shared.pdb
