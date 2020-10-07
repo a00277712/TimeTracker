@@ -1,0 +1,5 @@
+﻿<linker>
+  <assembly fullname="TimeTracker.Client">
+    <type fullname="*" required="true" />
+  </assembly>
+</linker>
