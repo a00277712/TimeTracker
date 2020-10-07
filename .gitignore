@@ -5,3 +5,7 @@
 /TimeTracker/.vs/TimeTracker
 /TimeTracker/TimeTracker/Client/bin/Debug/netstandard2.1
 /TimeTracker/TimeTracker/Shared/bin/Debug/netstandard2.1
+/TimeTracker/TimeTracker/Client/obj
+/TimeTracker/TimeTracker/Server/bin/Debug/netcoreapp3.1
+/TimeTracker/TimeTracker/Server/obj
+/TimeTracker/TimeTracker/Shared/obj
