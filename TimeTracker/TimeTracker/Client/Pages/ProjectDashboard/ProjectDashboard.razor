@@ -1,0 +1,132 @@
+﻿@page "/project-dashboard"
+@using System.Globalization
+@inject IProjectService service
+@inject IJSRuntime js
+
+<h3>Project Dashboard</h3>
+
+<br />
+@if (projects == null)
+{
+    <text>Loading...</text>
+}
+else if (projects.Length == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>Project</th>
+                <th>Code</th>
+                <th>Start</th>
+                <th>Finish</th>
+                <th>Project Log Date</th>
+                <th>Project Log</th>
+                <th>Reference Processes</th>
+                <th>Lead</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in projects)
+            {
+                <tr>
+                    <td>@project.Client</td>
+                    <td>@project.Title</td>
+                    <td>@project.Code</td>
+                    <td>@if (@project.StartDate.HasValue)@project.StartDate.Value.ToString("dd/MM/yyyy", CultureInfo.CurrentCulture)</td>
+                    <td>@if (@project.EndDate.HasValue)@project.EndDate.Value.ToString("dd/MM/yyyy", CultureInfo.CurrentCulture)</td>
+                    <td>@if (@project.ProjectLogDate.HasValue)@project.ProjectLogDate.Value.ToString("dd/MM/yyyy", CultureInfo.CurrentCulture)</td>
+                    <td @onclick="@(() => ProjectLog(project))" class="clickable project-log-row">@project.ProjectLog</td>
+                    <td>@project.ReferenceProcesses</td>
+                    <td>@project.Lead</td>
+                    <td>
+                        <button class="btn btn-success" @onclick="@(() => History(project.Id))">History</button>
+                        <button class="btn btn-success" @onclick="@(() => Summary(project.Id))">Summary</button>
+                        @if (String.Equals(project.ProjectLog, "Closeout", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <a class="btn btn-success" href="projects/closeout/@project.Id">Closeout</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (ProjectLogDialog)
+{
+    <div class="modal fade show d-block" id="exampleModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titleLabel">Project Log</h5>
+                    <button type="button" class="close" @onclick="@Close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@projectLogDto" OnValidSubmit="@UpdateProjectLog">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-group">
+                            <InputText id="lastName" class="form-control" @bind-Value="@projectLogDto.Text" placeholder="Project Log"></InputText>
+                            <ValidationMessage For="@(() => projectLogDto.Text)" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <a class="btn btn-outline-primary" @onclick="@Close">Close</a>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    public ProjectDashboardDto[] projects { get; set; }
+    public bool ProjectLogDialog { get; set; }
+    public ProjectLogDto projectLogDto { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await service.GetProjectDashboard();
+    }
+
+    private void ProjectLog(ProjectDashboardDto project)
+    {
+        projectLogDto = new ProjectLogDto
+        {
+            ProjectId = project.Id,
+            Text = project.ProjectLog
+        };
+
+        ProjectLogDialog = true;
+    }
+
+    public void Close()
+    {
+        ProjectLogDialog = false;
+    }
+
+    private async Task UpdateProjectLog()
+    {
+        await service.UpdateProjectLog(projectLogDto);
+
+        projects = await service.GetProjectDashboard();
+        Close();
+    }
+
+    private void History(int Id)
+    {
+
+    }
+
+    private void Summary(int Id)
+    {
+
+    }
+}

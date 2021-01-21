@@ -33,6 +33,14 @@ namespace TimeTracker.Server.Controllers
         }
 
         [HttpGet]
+        [Route("api/projects/dashboard")]
+        public IActionResult GetProjectDashboard()
+        {
+            using var db = new ModelContext();
+            return Ok(db.VwProjectDashboard.ToList());
+        }
+
+        [HttpGet]
         [Route("api/projects/templates")]
         public IActionResult GetProjectTemplates()
         {
@@ -179,6 +187,32 @@ namespace TimeTracker.Server.Controllers
             }
             using var db = new ModelContext();
             return Ok(!db.Projects.Any(x => x.Title == title));
+        }
+
+        [HttpPost]
+        [Route("api/projects/log/update")]
+        public IActionResult UpdateProjectLog(ProjectLogDto dto)
+        {
+            using var db = new ModelContext();
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var projectLog = db.ProjectLog.FirstOrDefault(x => x.ProjectId == dto.ProjectId && x.DateCreated == DateTime.Today);
+
+            if(projectLog == null)
+            {
+                projectLog = new ProjectLog
+                {
+                    ProjectId = dto.ProjectId,
+                    DateCreated = DateTime.Today
+                };
+
+                db.ProjectLog.Add(projectLog);
+            }
+
+            projectLog.Text = dto.Text;
+            projectLog.CreatedById = userId;
+
+            return Ok(db.SaveChanges());
         }
     }
 }

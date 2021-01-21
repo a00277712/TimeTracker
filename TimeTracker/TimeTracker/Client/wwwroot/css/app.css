@@ -186,3 +186,17 @@ app {
     top: 150px;
     width: 200px;
 }
+
+.clickable {
+    cursor: pointer;
+}
+
+.project-log-row {
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+}
+
+    .project-log-row:hover {
+        border-left: 1px solid red;
+        border-right: 1px solid red;
+    }

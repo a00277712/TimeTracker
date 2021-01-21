@@ -31,12 +31,15 @@ namespace TimeTracker.Server.Models
         public virtual DbSet<OperationalScores> OperationalScores { get; set; }
         public virtual DbSet<PersistedGrants> PersistedGrants { get; set; }
         public virtual DbSet<ProjectCloseouts> ProjectCloseouts { get; set; }
+        public virtual DbSet<ProjectLog> ProjectLog { get; set; }
         public virtual DbSet<ProjectTemplates> ProjectTemplates { get; set; }
         public virtual DbSet<Projects> Projects { get; set; }
         public virtual DbSet<ReputationalScores> ReputationalScores { get; set; }
         public virtual DbSet<ResourceProfileScores> ResourceProfileScores { get; set; }
         public virtual DbSet<Tasks> Tasks { get; set; }
         public virtual DbSet<Time> Time { get; set; }
+        public virtual DbSet<VwLatestProjectLog> VwLatestProjectLog { get; set; }
+        public virtual DbSet<VwProjectDashboard> VwProjectDashboard { get; set; }
         public virtual DbSet<VwTime> VwTime { get; set; }
         public virtual DbSet<VwUserRoles> VwUserRoles { get; set; }
 
@@ -315,6 +318,19 @@ namespace TimeTracker.Server.Models
                     .HasConstraintName("FK_ProjectCloseouts_ReputationalScores");
             });
 
+            modelBuilder.Entity<ProjectLog>(entity =>
+            {
+                entity.Property(e => e.CreatedById)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+
+                entity.Property(e => e.Text)
+                    .IsRequired()
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<ProjectTemplates>(entity =>
             {
                 entity.Property(e => e.ProjectType)
@@ -429,6 +445,44 @@ namespace TimeTracker.Server.Models
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Time_AspNetUsers");
+            });
+
+            modelBuilder.Entity<VwLatestProjectLog>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwLatestProjectLog");
+
+                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+
+                entity.Property(e => e.Text)
+                    .IsRequired()
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<VwProjectDashboard>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwProjectDashboard");
+
+                entity.Property(e => e.Client).HasMaxLength(50);
+
+                entity.Property(e => e.Code)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.EndDate).HasColumnType("date");
+
+                entity.Property(e => e.Lead).HasMaxLength(256);
+
+                entity.Property(e => e.ProjectLog).IsUnicode(false);
+
+                entity.Property(e => e.ProjectLogDate).HasColumnType("datetime");
+
+                entity.Property(e => e.StartDate).HasColumnType("date");
+
+                entity.Property(e => e.Title).HasMaxLength(50);
             });
 
             modelBuilder.Entity<VwTime>(entity =>
