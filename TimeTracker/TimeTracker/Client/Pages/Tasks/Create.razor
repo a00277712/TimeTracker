@@ -1,0 +1,28 @@
+﻿@page "/project/task/create/{projectId}"
+@inject ITaskService service
+@inject NavigationManager uriHelper
+@attribute [Authorize(Roles = "Setup")]
+
+<h3>Create</h3>
+
+<Form ButtonText="Create" task="@task" OnValidSubmit="@CreateTask" />
+
+@code {
+    [Parameter] public string projectId { get; set; }
+
+    TaskDto task;
+
+    protected override void OnParametersSet()
+    {
+        task = new TaskDto
+        {
+            ProjectId = Int32.Parse(projectId)
+        };
+    }
+
+    async Task CreateTask()
+    {
+        await service.Create(task);
+        uriHelper.NavigateTo("project/tasks/" + projectId);
+    }
+}

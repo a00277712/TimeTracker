@@ -1,0 +1,17 @@
+﻿@page "/projects/create"
+@inject NavigationManager uriHelper
+@inject IProjectService service
+@attribute [Authorize(Roles = "Setup")]
+
+<h3>Create</h3>
+
+<Form ButtonText="Create" project="@project" OnValidSubmit="@CreateProject" />
+
+@code {
+    ProjectDto project = new ProjectDto();
+    async Task CreateProject()
+    {
+        await service.Create(project);
+        uriHelper.NavigateTo("projects");
+    }
+}

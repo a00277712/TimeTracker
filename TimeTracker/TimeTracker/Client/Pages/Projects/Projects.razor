@@ -1,0 +1,75 @@
+﻿@page "/projects"
+@using System.Globalization
+@inject IProjectService service
+@inject IJSRuntime js
+@attribute [Authorize(Roles = "Setup")]
+
+<h3>Projects</h3>
+
+<div class="form-group">
+    <a class="btn btn-success" href="projects/create"><i class="oi oi-plus"></i>Create New</a>
+</div>
+
+<br />
+@if (projects == null)
+{
+    <text>Loading...</text>
+}
+else if (projects.Length == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Client</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Budget Days</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in projects)
+            {
+                <tr>
+                    <td>@project.Code</td>
+                    <td>@project.Title</td>
+                    <td>@project.Description</td>
+                    <td>@project.Client</td>
+                    <td>@if (@project.StartDate.HasValue)@project.StartDate.Value.ToString("dd/MM/yyyy", CultureInfo.CurrentCulture)</td>
+                    <td>@if (@project.EndDate.HasValue)@project.EndDate.Value.ToString("dd/MM/yyyy", CultureInfo.CurrentCulture)</td>
+                    <td>@project.BudgetDays</td>
+                    <td>
+                        <a class="btn btn-success" href="project/tasks/@project.Id">Tasks</a>
+                        <a class="btn btn-success" href="projects/edit/@project.Id">Edit</a>
+                        <button class="btn btn-danger" @onclick="@(() => Delete(project.Id))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    ProjectDto[] projects { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await service.Get();
+    }
+
+    async Task Delete(int Id)
+    {
+        var project = projects.First(x => x.Id == Id);
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete project: {project.Title}?"))
+        {
+            await service.Delete(Id);
+            await OnInitializedAsync();
+        }
+    }
+}

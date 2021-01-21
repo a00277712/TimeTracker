@@ -1,0 +1,30 @@
+﻿@page "/time/create/{taskId}"
+@inject ITimeService service
+@inject NavigationManager uriHelper
+@attribute [Authorize]
+
+<h3>Create</h3>
+
+<Form ButtonText="Add Time" time="@time"
+      OnValidSubmit="@CreateTask" />
+
+@code {
+    [Parameter] public string taskId { get; set; }
+
+    TimeDto time;
+
+    protected override void OnParametersSet()
+    {
+        time = new TimeDto
+        {
+            TaskId = Int32.Parse(taskId),
+            WorkDate = DateTime.Now
+        };
+    }
+
+    async Task CreateTask()
+    {
+        await service.Create(time);
+        uriHelper.NavigateTo("/");
+    }
+}

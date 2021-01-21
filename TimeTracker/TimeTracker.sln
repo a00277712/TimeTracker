@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTracker.Server", "TimeTracker\Server\TimeTracker.Server.csproj", "{D7DC68A0-C110-40AD-B6B7-3E98AA2863E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTracker.Server", "TimeTracker\Server\TimeTracker.Server.csproj", "{723D51D8-F75F-4E9F-974A-6553760F6829}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTracker.Client", "TimeTracker\Client\TimeTracker.Client.csproj", "{05667D55-09BB-4130-B26F-D8F1B17F77C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTracker.Client", "TimeTracker\Client\TimeTracker.Client.csproj", "{B7357889-970F-4BFA-A568-CD167F1A6507}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTracker.Shared", "TimeTracker\Shared\TimeTracker.Shared.csproj", "{F4921F91-1F09-455D-ACA1-1A5C4DFB9FA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTracker.Shared", "TimeTracker\Shared\TimeTracker.Shared.csproj", "{1937AB2E-9D3A-4225-9488-54B5C17C04F6}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{C98E6213-1492-4079-AA12-4328569FC015}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,23 +17,29 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D7DC68A0-C110-40AD-B6B7-3E98AA2863E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7DC68A0-C110-40AD-B6B7-3E98AA2863E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7DC68A0-C110-40AD-B6B7-3E98AA2863E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7DC68A0-C110-40AD-B6B7-3E98AA2863E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05667D55-09BB-4130-B26F-D8F1B17F77C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05667D55-09BB-4130-B26F-D8F1B17F77C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05667D55-09BB-4130-B26F-D8F1B17F77C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05667D55-09BB-4130-B26F-D8F1B17F77C1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F4921F91-1F09-455D-ACA1-1A5C4DFB9FA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4921F91-1F09-455D-ACA1-1A5C4DFB9FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4921F91-1F09-455D-ACA1-1A5C4DFB9FA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4921F91-1F09-455D-ACA1-1A5C4DFB9FA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{723D51D8-F75F-4E9F-974A-6553760F6829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{723D51D8-F75F-4E9F-974A-6553760F6829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{723D51D8-F75F-4E9F-974A-6553760F6829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{723D51D8-F75F-4E9F-974A-6553760F6829}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7357889-970F-4BFA-A568-CD167F1A6507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7357889-970F-4BFA-A568-CD167F1A6507}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7357889-970F-4BFA-A568-CD167F1A6507}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7357889-970F-4BFA-A568-CD167F1A6507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1937AB2E-9D3A-4225-9488-54B5C17C04F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1937AB2E-9D3A-4225-9488-54B5C17C04F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1937AB2E-9D3A-4225-9488-54B5C17C04F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1937AB2E-9D3A-4225-9488-54B5C17C04F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C98E6213-1492-4079-AA12-4328569FC015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C98E6213-1492-4079-AA12-4328569FC015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C98E6213-1492-4079-AA12-4328569FC015}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C98E6213-1492-4079-AA12-4328569FC015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C98E6213-1492-4079-AA12-4328569FC015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C98E6213-1492-4079-AA12-4328569FC015}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {519FC142-ABB5-42D7-9EF6-880FFB157038}
+		SolutionGuid = {23F13410-9930-470D-B37F-D9E95988F381}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,27 @@
+﻿<EditForm Model="@task" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <div>
+            <label>Title:</label>
+            <div>
+                <InputText @bind-Value="task.Title" />
+                <ValidationMessage For="@(() => task.Title)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Task No:</label>
+        <div>
+            <InputNumber @bind-Value="task.TaskNo" />
+            <ValidationMessage For="@(() => task.TaskNo)" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">
+        @ButtonText
+    </button>
+</EditForm>
+@code {
+    [Parameter] public TaskDto task { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

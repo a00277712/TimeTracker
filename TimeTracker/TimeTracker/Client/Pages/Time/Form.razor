@@ -1,0 +1,72 @@
+﻿@inject IBillableTypeService billableTypeService
+
+<EditForm Model="@time" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group ">
+        <div>
+            <label>Work Date:</label>
+            <div>
+                <InputDate @bind-Value="time.WorkDate" />
+                <ValidationMessage For="@(() => time.WorkDate)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Hours:</label>
+        <div>
+            <InputNumber @bind-Value="time.Hours" />
+            <ValidationMessage For="@(() => time.Hours)" />
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Comment:</label>
+            <div>
+                <InputText @bind-Value="time.Comment" />
+                <ValidationMessage For="@(() => time.Comment)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Location:</label>
+            <div>
+                <InputText @bind-Value="time.Location" />
+                <ValidationMessage For="@(() => time.Location)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Billable Type:</label>
+            <div>
+                <InputSelectNumber @bind-Value="time.BillableTypeId">
+                    <option value="0" hidden>--</option>
+                    @if (billableTypeList != null)
+                    {
+                        @foreach (var billableType in billableTypeList)
+                        {
+                            <option value="@billableType.Id" selected="@(time.BillableTypeId == billableType.Id)">@billableType.Text</option>
+                        }
+                    }
+                </InputSelectNumber>
+                <ValidationMessage For="@(() => time.BillableTypeId)" />
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        @ButtonText
+    </button>
+</EditForm>
+
+@code {
+    [Parameter] public TimeDto time { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    private BillableTypeDto[] billableTypeList;
+
+    protected override async Task OnInitializedAsync() =>
+        billableTypeList = await billableTypeService.Get();
+}

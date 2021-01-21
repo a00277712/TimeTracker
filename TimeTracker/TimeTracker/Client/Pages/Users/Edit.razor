@@ -1,0 +1,35 @@
+﻿@page "/users/edit/{id}"
+@inject NavigationManager uriHelper
+@inject ISetupUserService service
+@attribute [Authorize(Roles = "Setup")]
+
+<h3>Create</h3>
+
+<UsersForm ButtonText="Edit" user="@user" OnValidSubmit="@EditUser" />
+
+<button @onclick="ViewRoles" class="btn btn-primary"> Roles </button>
+
+<RolesDialog @ref="rolesDialog" userId="@id"></RolesDialog>
+
+@code {
+    [Parameter] public string id { get; set; }
+    UserDto user = new UserDto();
+    RolesDialog rolesDialog; 
+
+    void ViewRoles(){
+        rolesDialog.Show();
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        user = await service.GetById(id);
+        user.OldUsername = user.UserName;
+        user.OldEmail = user.Email;
+    }
+
+    async Task EditUser()
+    {
+        await service.Edit(user);
+        uriHelper.NavigateTo("users");
+    }
+    }

@@ -1,0 +1,24 @@
+﻿@page "/tasks/edit/{id}"
+@inject ITaskService service
+@inject NavigationManager uriHelper
+@attribute [Authorize(Roles = "Setup")]
+
+<h3>Edit</h3>
+
+<Form ButtonText="Edit" task="@task" OnValidSubmit="@EditTask" />
+
+@code {
+    [Parameter] public string id { get; set; }
+    TaskDto task = new TaskDto();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        task = await service.GetById(id);
+    }
+
+    async Task EditTask()
+    {
+        await service.Edit(task);
+        uriHelper.NavigateTo("project/tasks/" + task.ProjectId);
+    }
+}

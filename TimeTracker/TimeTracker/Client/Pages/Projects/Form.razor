@@ -1,0 +1,182 @@
+﻿@inject ISetupUserService userService
+
+<EditForm Model="@project" OnValidSubmit="@OnValidSubmit">
+    <FluentValidationValidator />
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Code:</label>
+        <div>
+            <InputText @bind-Value="project.Code" />
+            <ValidationMessage For="@(() => project.Code)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Title:</label>
+            <div>
+                <InputText @bind-Value="project.Title" />
+                <ValidationMessage For="@(() => project.Title)" />
+            </div>
+        </div>
+    </div>
+    @if (project.Id == 0)
+    {
+        <fieldset>
+            <legend>Project Template</legend>
+
+            @foreach (var item in new string[] { "Managed Services", "Professional Services", "Software" })
+            {
+                <div>
+                    <input type="radio" name="technology" id="@item" value="@item" @onchange="RadioSelection" />
+                    <label for="@item">@item</label>
+                </div>
+            }
+            <ValidationMessage For="@(() => project.ProjectTemplate)" />
+        </fieldset>
+    }
+    <div class="form-group">
+        <div>
+            <label>Description:</label>
+            <div>
+                <InputText @bind-Value="project.Description" />
+                <ValidationMessage For="@(() => project.Description)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Client:</label>
+            <div>
+                <InputText @bind-Value="project.Client" />
+                <ValidationMessage For="@(() => project.Client)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Client Contact:</label>
+            <div>
+                <InputText @bind-Value="project.ClientContact" />
+                <ValidationMessage For="@(() => project.ClientContact)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Notes:</label>
+            <div>
+                <InputText @bind-Value="project.Notes" />
+                <ValidationMessage For="@(() => project.Notes)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Start Date:</label>
+            <div>
+                <InputDate type="date" @bind-Value="project.StartDate" />
+                <ValidationMessage For="@(() => project.StartDate)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>End Date:</label>
+            <div>
+                <InputDate type="date" @bind-Value="project.EndDate" />
+                <ValidationMessage For="@(() => project.EndDate)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Commercial Cover:</label>
+            <div>
+                <InputText @bind-Value="project.CommercialCover" />
+                <ValidationMessage For="@(() => project.CommercialCover)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Project Deliverables:</label>
+            <div>
+                <InputText @bind-Value="project.ProjectDeliverables" />
+                <ValidationMessage For="@(() => project.ProjectDeliverables)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Data Processing:</label>
+            <div>
+                <input type="checkbox" @bind="project.DataProcessing" />
+                <ValidationMessage For="@(() => project.DataProcessing)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Budget Days:</label>
+            <div>
+                <InputNumber @bind-Value="project.BudgetDays" />
+                <ValidationMessage For="@(() => project.BudgetDays)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Project Manager:</label>
+            <div>
+                <InputSelect @bind-Value="project.ProjectManagerId">
+                    <option hidden>--</option>
+                    @if (usersList != null)
+                    {
+                        @foreach (var user in usersList)
+                        {
+                            <option value="@user.Id" selected="@(project.ProjectManagerId == user.Id)">@user.UserName</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => project.ProjectManagerId)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Contact Email:</label>
+            <div>
+                <InputText @bind-Value="project.ContactEmail" />
+                <ValidationMessage For="@(() => project.ContactEmail)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label>Reference Processes:</label>
+            <div>
+                <InputNumber @bind-Value="project.ReferenceProcesses" />
+                <ValidationMessage For="@(() => project.ReferenceProcesses)" />
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">
+        @ButtonText
+    </button>
+</EditForm>
+
+@code {
+    [Parameter] public ProjectDto project { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    private UserDto[] usersList;
+
+    protected override async Task OnInitializedAsync() =>
+        usersList = await userService.Get();
+
+    void RadioSelection(ChangeEventArgs args)
+    {
+        project.ProjectTemplate = args.Value.ToString();
+    }
+}

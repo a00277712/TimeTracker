@@ -1,0 +1,68 @@
+﻿@page "/users"
+@inject IJSRuntime js
+@inject ISetupUserService service
+@attribute [Authorize(Roles = "Setup")]
+
+<h3>Users</h3>
+
+<div class="form-group">
+    <a class="btn btn-success" href="users/create"><i class="oi oi-plus"></i> Create New</a>
+</div>
+
+<br />
+
+@if (users == null)
+{
+    <text>Loading...</text>
+}
+else if (users.Length == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>UserName</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (UserDto user in users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.UserName</td>
+                    <td>@user.PhoneNumber</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <a class="btn btn-success" href="users/edit/@user.Id">Edit</a>
+                        <button class="btn btn-danger" @onclick="@(() => Delete(user.Id))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    UserDto[] users { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await service.Get();
+    }
+
+    async Task Delete(string id)
+    {
+        var user = users.First(x => x.Id == id);
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {user.UserName}'s Account?"))
+        {
+            await service.Delete(id);
+            await OnInitializedAsync();
+        }
+    }
+}

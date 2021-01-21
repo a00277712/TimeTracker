@@ -1,0 +1,70 @@
+﻿@inject HttpClient http
+@inject ISetupUserService service
+@attribute [Authorize(Roles = "Setup")]
+
+@if (ShowDialog)
+{
+    <div class="modal fade show d-block" id="rolesModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog roles-model" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titleLabel">Roles</h5>
+                    <button type="button" class="close" @onclick="@Close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @if (roles == null)
+                    {
+                        <text>Loading...</text>
+                    }
+                    else if (roles.Length == 0)
+                    {
+                        <text>No Roles Found</text>
+                    }
+                    else
+                    {
+                        @foreach (var role in roles)
+                        {
+                            <label>
+                                @role.RoleName
+                                <input type="checkbox" checked=@role.Assigned
+                                       @onchange="async eventArgs => { await RoleChanged(role, (bool)eventArgs.Value); }" />
+                            </label>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string userId { get; set; }
+
+    public VwUserRole[] roles { get; set; }
+    public bool ShowDialog { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        roles = await service.GetRolesByUserId(userId);
+    }
+
+    private async Task RoleChanged(VwUserRole role, bool assigned)
+    {
+        role.Assigned = assigned;
+        await service.SetRole(role);
+    }
+
+    public void Show()
+    {
+        ShowDialog = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ShowDialog = false;
+        StateHasChanged();
+    }
+}

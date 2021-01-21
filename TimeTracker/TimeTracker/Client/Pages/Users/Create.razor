@@ -1,0 +1,18 @@
+﻿@page "/users/create"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+@inject ISetupUserService service
+@attribute [Authorize(Roles = "Setup")]
+
+<h3>Create</h3>
+
+<UsersForm ButtonText="Create" user="@user" OnValidSubmit="@CreateUser" />
+
+@code {
+    UserDto user = new UserDto();
+    async Task CreateUser()
+    {
+        await service.Create(user);
+        uriHelper.NavigateTo("users");
+    }
+}
