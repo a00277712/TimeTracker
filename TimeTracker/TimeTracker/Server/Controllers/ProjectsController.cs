@@ -32,6 +32,14 @@ namespace TimeTracker.Server.Controllers
             return Ok(db.Projects.Find(id));
         }
 
+        [HttpGet]
+        [Route("api/projects/templates")]
+        public IActionResult GetProjectTemplates()
+        {
+            using var db = new ModelContext();
+            return Ok(db.ProjectTemplates.Select(x => x.ProjectType).Distinct().ToArray());
+        }
+
         [HttpPost]
         [Authorize(Roles ="Setup")]
         [Route("api/projects/create")]

@@ -1,4 +1,5 @@
 ﻿@inject ISetupUserService userService
+@inject IProjectService service
 
 <EditForm Model="@project" OnValidSubmit="@OnValidSubmit">
     <FluentValidationValidator />
@@ -19,12 +20,12 @@
             </div>
         </div>
     </div>
-    @if (project.Id == 0)
+    @if (project.Id == 0 && templateList != null)
     {
         <fieldset>
             <legend>Project Template</legend>
 
-            @foreach (var item in new string[] { "Managed Services", "Professional Services", "Software" })
+            @foreach (var item in templateList)
             {
                 <div>
                     <input type="radio" name="technology" id="@item" value="@item" @onchange="RadioSelection" />
@@ -166,14 +167,17 @@
 </EditForm>
 
 @code {
-    [Parameter] public ProjectDto project { get; set; }
-    [Parameter] public string ButtonText { get; set; } = "Save";
-    [Parameter] public EventCallback OnValidSubmit { get; set; }
+        [Parameter] public ProjectDto project { get; set; }
+        [Parameter] public string ButtonText { get; set; } = "Save";
+        [Parameter] public EventCallback OnValidSubmit { get; set; }
 
     private UserDto[] usersList;
+    private string[] templateList;
 
-    protected override async Task OnInitializedAsync() =>
+    protected override async Task OnInitializedAsync() {
         usersList = await userService.Get();
+        templateList = await service.GetProjectTemplates();
+    }
 
     void RadioSelection(ChangeEventArgs args)
     {

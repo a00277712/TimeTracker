@@ -38,5 +38,10 @@ namespace TimeTracker.Client.Services
         {
             return await http.GetFromJsonAsync<ProjectDto>($"api/projects/{id}");
         }
+
+        public async Task<string[]> GetProjectTemplates()
+        {
+            return await http.GetFromJsonAsync<string[]>($"api/projects/templates");
+        }
     }
 }
