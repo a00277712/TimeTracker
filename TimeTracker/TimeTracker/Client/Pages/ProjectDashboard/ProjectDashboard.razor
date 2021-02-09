@@ -49,10 +49,12 @@ else
                     <td>
                         <button class="btn btn-success" @onclick="@(() => History(project))">History</button>
                         <button class="btn btn-success" @onclick="@(() => Summary(project.Id))">Summary</button>
-                        @if (String.Equals(project.ProjectLog, "Closeout", StringComparison.OrdinalIgnoreCase))
-                        {
-                            <a class="btn btn-success" href="projects/closeout/@project.Id">Closeout</a>
-                        }
+                        <AuthorizeView Roles="Setup">
+                            @if (String.Equals(project.ProjectLog, "Closeout", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <a class="btn btn-success" href="projects/closeout/@project.Id">Closeout</a>
+                            }
+                        </AuthorizeView>
                     </td>
                 </tr>
             }
