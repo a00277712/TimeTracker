@@ -1,0 +1,70 @@
+﻿@using System.Globalization
+
+@inject HttpClient http
+@inject IProjectService service
+
+@attribute [Authorize]
+
+@if (ShowDialog)
+{
+    <div class="modal fade show d-block" id="rolesModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog history-model" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titleLabel">@Title</h5>
+                    <button type="button" class="close" @onclick="@Close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @if (History == null)
+                    {
+                        <text>Loading...</text>
+                    }
+                    else if (History.Length == 0)
+                    {
+                        <text>No Comments Found</text>
+                    }
+                    else
+                    {
+                        @foreach (var item in History)
+                        {
+                            <div>
+                                <div>@item.DateCreated.ToString("dd/MM/yyyy", CultureInfo.CurrentCulture):</div>
+                                <div>@item.Text</div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string Title { get; set; }
+
+    public ProjectLogHistoryDto[] History { get; set; }
+    public bool ShowDialog { get; set; }
+
+    private async Task LoadData(int Id)
+    {
+        History = null;
+        StateHasChanged();
+        History = await service.GetProjectDashboardHistory(Id);
+        StateHasChanged();
+    }
+
+    public void Show(int Id)
+    {
+        LoadData(Id);
+        ShowDialog = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ShowDialog = false;
+        StateHasChanged();
+    }
+}

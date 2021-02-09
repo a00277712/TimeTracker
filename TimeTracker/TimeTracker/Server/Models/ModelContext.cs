@@ -38,8 +38,11 @@ namespace TimeTracker.Server.Models
         public virtual DbSet<ResourceProfileScores> ResourceProfileScores { get; set; }
         public virtual DbSet<Tasks> Tasks { get; set; }
         public virtual DbSet<Time> Time { get; set; }
+        public virtual DbSet<VwHoursEntered> VwHoursEntered { get; set; }
         public virtual DbSet<VwLatestProjectLog> VwLatestProjectLog { get; set; }
+        public virtual DbSet<VwProjectCloseouts> VwProjectCloseouts { get; set; }
         public virtual DbSet<VwProjectDashboard> VwProjectDashboard { get; set; }
+        public virtual DbSet<VwTasks> VwTasks { get; set; }
         public virtual DbSet<VwTime> VwTime { get; set; }
         public virtual DbSet<VwUserRoles> VwUserRoles { get; set; }
 
@@ -72,7 +75,7 @@ namespace TimeTracker.Server.Models
                     .IsUnique()
                     .HasFilter("([NormalizedName] IS NOT NULL)");
 
-                entity.Property(e => e.Name).HasMaxLength(256);
+                entity.Property(e => e.Name).HasMaxLength(1024);
 
                 entity.Property(e => e.NormalizedName).HasMaxLength(256);
             });
@@ -143,64 +146,54 @@ namespace TimeTracker.Server.Models
                     .IsUnique()
                     .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
-                entity.Property(e => e.Email).HasMaxLength(256);
+                entity.Property(e => e.Email).HasMaxLength(512);
 
                 entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
 
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
 
-                entity.Property(e => e.UserName).HasMaxLength(256);
+                entity.Property(e => e.UserName).HasMaxLength(512);
             });
 
             modelBuilder.Entity<BillableType>(entity =>
             {
-                entity.Property(e => e.CreatedById)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedById).HasMaxLength(1800);
 
                 entity.Property(e => e.DateCreated).HasColumnType("datetime");
 
                 entity.Property(e => e.DateLastModified).HasColumnType("datetime");
 
-                entity.Property(e => e.LastModifiedById).HasMaxLength(450);
+                entity.Property(e => e.LastModifiedById).HasMaxLength(1800);
 
-                entity.Property(e => e.Text).HasMaxLength(50);
+                entity.Property(e => e.Text).HasMaxLength(200);
             });
 
             modelBuilder.Entity<BusinessDevelopmentScores>(entity =>
             {
-                entity.Property(e => e.Text)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Text).HasMaxLength(200);
             });
 
             modelBuilder.Entity<CloseoutReasons>(entity =>
             {
-                entity.Property(e => e.CreatedById)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedById).HasMaxLength(1800);
 
                 entity.Property(e => e.DateCreated).HasColumnType("datetime");
 
                 entity.Property(e => e.DateLastModified).HasColumnType("datetime");
 
-                entity.Property(e => e.LastModifiedById).HasMaxLength(450);
+                entity.Property(e => e.LastModifiedById).HasMaxLength(1800);
 
-                entity.Property(e => e.Text).HasMaxLength(50);
+                entity.Property(e => e.Text).HasMaxLength(200);
             });
 
             modelBuilder.Entity<ClosoutReasons>(entity =>
             {
-                entity.Property(e => e.Text)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Text).HasMaxLength(200);
             });
 
             modelBuilder.Entity<CommercialScores>(entity =>
             {
-                entity.Property(e => e.Text)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Text).HasMaxLength(200);
             });
 
             modelBuilder.Entity<DeviceCodes>(entity =>
@@ -214,24 +207,16 @@ namespace TimeTracker.Server.Models
 
                 entity.Property(e => e.UserCode).HasMaxLength(200);
 
-                entity.Property(e => e.ClientId)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.ClientId).HasMaxLength(800);
 
-                entity.Property(e => e.Data).IsRequired();
+                entity.Property(e => e.DeviceCode).HasMaxLength(400);
 
-                entity.Property(e => e.DeviceCode)
-                    .IsRequired()
-                    .HasMaxLength(200);
-
-                entity.Property(e => e.SubjectId).HasMaxLength(200);
+                entity.Property(e => e.SubjectId).HasMaxLength(800);
             });
 
             modelBuilder.Entity<OperationalScores>(entity =>
             {
-                entity.Property(e => e.Text)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Text).HasMaxLength(200);
             });
 
             modelBuilder.Entity<PersistedGrants>(entity =>
@@ -244,17 +229,11 @@ namespace TimeTracker.Server.Models
 
                 entity.Property(e => e.Key).HasMaxLength(200);
 
-                entity.Property(e => e.ClientId)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.ClientId).HasMaxLength(400);
 
-                entity.Property(e => e.Data).IsRequired();
+                entity.Property(e => e.SubjectId).HasMaxLength(400);
 
-                entity.Property(e => e.SubjectId).HasMaxLength(200);
-
-                entity.Property(e => e.Type)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Type).HasMaxLength(100);
             });
 
             modelBuilder.Entity<ProjectCloseouts>(entity =>
@@ -291,13 +270,19 @@ namespace TimeTracker.Server.Models
                     .WithMany(p => p.ProjectCloseouts)
                     .HasForeignKey(d => d.CloseoutReasonId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProjectCloseouts_CloseoutReasons");
+                    .HasConstraintName("FK_ProjectCloseouts_CloseoutReasons1");
 
                 entity.HasOne(d => d.CommercialScore)
                     .WithMany(p => p.ProjectCloseouts)
                     .HasForeignKey(d => d.CommercialScoreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProjectCloseouts_CommercialScores");
+
+                entity.HasOne(d => d.CreatedBy)
+                    .WithMany(p => p.ProjectCloseouts)
+                    .HasForeignKey(d => d.CreatedById)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectCloseouts_AspNetUsers");
 
                 entity.HasOne(d => d.OperationalScore)
                     .WithMany(p => p.ProjectCloseouts)
@@ -316,43 +301,48 @@ namespace TimeTracker.Server.Models
                     .HasForeignKey(d => d.ReputationalScoreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProjectCloseouts_ReputationalScores");
+
+                entity.HasOne(d => d.ResourceProfileScore)
+                    .WithMany(p => p.ProjectCloseouts)
+                    .HasForeignKey(d => d.ResourceProfileScoreId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectCloseouts_ResourceProfileScores");
             });
 
             modelBuilder.Entity<ProjectLog>(entity =>
             {
-                entity.Property(e => e.CreatedById)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedById).HasMaxLength(450);
 
                 entity.Property(e => e.DateCreated).HasColumnType("datetime");
 
-                entity.Property(e => e.Text)
-                    .IsRequired()
-                    .IsUnicode(false);
+                entity.Property(e => e.Text).IsUnicode(false);
+
+                entity.HasOne(d => d.CreatedBy)
+                    .WithMany(p => p.ProjectLog)
+                    .HasForeignKey(d => d.CreatedById)
+                    .HasConstraintName("FK_ProjectLog_AspNetUsers");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectLog)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectLog_Projects");
             });
 
             modelBuilder.Entity<ProjectTemplates>(entity =>
             {
-                entity.Property(e => e.ProjectType)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.ProjectType).HasMaxLength(200);
 
-                entity.Property(e => e.TaskTitle)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.TaskTitle).HasMaxLength(200);
             });
 
             modelBuilder.Entity<Projects>(entity =>
             {
-                entity.Property(e => e.Client).HasMaxLength(50);
+                entity.Property(e => e.Client).HasMaxLength(200);
 
-                entity.Property(e => e.Code)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Code).HasMaxLength(200);
 
-                entity.Property(e => e.CreatedById)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedById).HasMaxLength(1800);
 
                 entity.Property(e => e.DateCreated).HasColumnType("datetime");
 
@@ -360,44 +350,36 @@ namespace TimeTracker.Server.Models
 
                 entity.Property(e => e.EndDate).HasColumnType("date");
 
-                entity.Property(e => e.LastModifiedById).HasMaxLength(450);
+                entity.Property(e => e.LastModifiedById).HasMaxLength(1800);
 
-                entity.Property(e => e.ProjectManagerId).HasMaxLength(450);
+                entity.Property(e => e.ProjectManagerId).HasMaxLength(1800);
 
                 entity.Property(e => e.StartDate).HasColumnType("date");
 
-                entity.Property(e => e.Title).HasMaxLength(50);
+                entity.Property(e => e.Title).HasMaxLength(200);
             });
 
             modelBuilder.Entity<ReputationalScores>(entity =>
             {
-                entity.Property(e => e.Text)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Text).HasMaxLength(200);
             });
 
             modelBuilder.Entity<ResourceProfileScores>(entity =>
             {
-                entity.Property(e => e.Text)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Text).HasMaxLength(200);
             });
 
             modelBuilder.Entity<Tasks>(entity =>
             {
-                entity.Property(e => e.CreatedById)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedById).HasMaxLength(1800);
 
                 entity.Property(e => e.DateCreated).HasColumnType("datetime");
 
                 entity.Property(e => e.DateLastModified).HasColumnType("datetime");
 
-                entity.Property(e => e.LastModifiedById).HasMaxLength(450);
+                entity.Property(e => e.LastModifiedById).HasMaxLength(1800);
 
-                entity.Property(e => e.Title)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Title).HasMaxLength(200);
 
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.Tasks)
@@ -447,6 +429,45 @@ namespace TimeTracker.Server.Models
                     .HasConstraintName("FK_Time_AspNetUsers");
             });
 
+            modelBuilder.Entity<VwHoursEntered>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwHoursEntered");
+
+                entity.Property(e => e.BillableType)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Client).HasMaxLength(200);
+
+                entity.Property(e => e.Comments).IsRequired();
+
+                entity.Property(e => e.Days).HasColumnType("numeric(38, 6)");
+
+                entity.Property(e => e.Hours).HasColumnType("numeric(38, 2)");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Location)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ProjectCode).HasMaxLength(200);
+
+                entity.Property(e => e.ProjectTitle).HasMaxLength(200);
+
+                entity.Property(e => e.TaskTitle)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Username)
+                    .IsRequired()
+                    .HasMaxLength(512);
+
+                entity.Property(e => e.WorkDate).HasColumnType("date");
+            });
+
             modelBuilder.Entity<VwLatestProjectLog>(entity =>
             {
                 entity.HasNoKey();
@@ -460,21 +481,64 @@ namespace TimeTracker.Server.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<VwProjectCloseouts>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwProjectCloseouts");
+
+                entity.Property(e => e.BusinessDevelopmentScore).HasMaxLength(200);
+
+                entity.Property(e => e.CaseStudy).HasColumnName("caseStudy");
+
+                entity.Property(e => e.Client).HasMaxLength(200);
+
+                entity.Property(e => e.CloseoutReason).HasMaxLength(200);
+
+                entity.Property(e => e.Code).HasMaxLength(200);
+
+                entity.Property(e => e.CommercialScore).HasMaxLength(200);
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(512);
+
+                entity.Property(e => e.CustomerDataManagement).IsUnicode(false);
+
+                entity.Property(e => e.DataPurged).HasColumnName("dataPurged");
+
+                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+
+                entity.Property(e => e.FeedBack).IsUnicode(false);
+
+                entity.Property(e => e.FollowUpActions).IsUnicode(false);
+
+                entity.Property(e => e.LearningActions).IsUnicode(false);
+
+                entity.Property(e => e.OperationalScore).HasMaxLength(200);
+
+                entity.Property(e => e.OpsLearnings).IsUnicode(false);
+
+                entity.Property(e => e.ReputationalScore).HasMaxLength(200);
+
+                entity.Property(e => e.ResourceProfileScore).HasMaxLength(200);
+
+                entity.Property(e => e.SalesLearnings).IsUnicode(false);
+
+                entity.Property(e => e.Title).HasMaxLength(200);
+            });
+
             modelBuilder.Entity<VwProjectDashboard>(entity =>
             {
                 entity.HasNoKey();
 
                 entity.ToView("vwProjectDashboard");
 
-                entity.Property(e => e.Client).HasMaxLength(50);
+                entity.Property(e => e.Client).HasMaxLength(200);
 
-                entity.Property(e => e.Code)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Code).HasMaxLength(200);
 
                 entity.Property(e => e.EndDate).HasColumnType("date");
 
-                entity.Property(e => e.Lead).HasMaxLength(256);
+                entity.Property(e => e.Lead).HasMaxLength(512);
 
                 entity.Property(e => e.ProjectLog).IsUnicode(false);
 
@@ -482,7 +546,22 @@ namespace TimeTracker.Server.Models
 
                 entity.Property(e => e.StartDate).HasColumnType("date");
 
-                entity.Property(e => e.Title).HasMaxLength(50);
+                entity.Property(e => e.Title).HasMaxLength(200);
+            });
+
+            modelBuilder.Entity<VwTasks>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwTasks");
+
+                entity.Property(e => e.DisplayText).HasMaxLength(213);
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.SpentDays).HasColumnType("numeric(38, 6)");
+
+                entity.Property(e => e.Title).HasMaxLength(200);
             });
 
             modelBuilder.Entity<VwTime>(entity =>

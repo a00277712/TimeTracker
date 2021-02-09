@@ -41,11 +41,31 @@ namespace TimeTracker.Server.Controllers
         }
 
         [HttpGet]
+        [Route("api/projects/dashboard/history/{Id}")]
+        public IActionResult GetProjectDashboardLog(int Id)
+        {
+            using var db = new ModelContext();
+            return Ok(db.ProjectLog
+                .Where(x => x.ProjectId == Id)
+                .Select(x => new ProjectLogHistoryDto
+                {
+                    Text = x.Text,
+                    CreatedBy = x.CreatedBy.UserName,
+                    DateCreated = x.DateCreated
+                })
+                .OrderByDescending(x => x.DateCreated)
+                .ToList());
+        }
+
+        [HttpGet]
         [Route("api/projects/templates")]
         public IActionResult GetProjectTemplates()
         {
             using var db = new ModelContext();
-            return Ok(db.ProjectTemplates.Select(x => x.ProjectType).Distinct().ToArray());
+            return Ok(db.ProjectTemplates
+                .Select(x => x.ProjectType)
+                .Distinct()
+                .ToArray());
         }
 
         [HttpPost]

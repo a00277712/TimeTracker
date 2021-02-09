@@ -11,6 +11,8 @@ namespace TimeTracker.Server.Models
             AspNetUserLogins = new HashSet<AspNetUserLogins>();
             AspNetUserRoles = new HashSet<AspNetUserRoles>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
+            ProjectCloseouts = new HashSet<ProjectCloseouts>();
+            ProjectLog = new HashSet<ProjectLog>();
             Time = new HashSet<Time>();
         }
 
@@ -34,6 +36,8 @@ namespace TimeTracker.Server.Models
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual ICollection<ProjectCloseouts> ProjectCloseouts { get; set; }
+        public virtual ICollection<ProjectLog> ProjectLog { get; set; }
         public virtual ICollection<Time> Time { get; set; }
     }
 }

@@ -187,6 +187,11 @@ app {
     width: 200px;
 }
 
+.history-model {
+    top: 150px;
+    width: 500px;
+}
+
 .clickable {
     cursor: pointer;
 }

@@ -7,6 +7,7 @@ namespace TimeTracker.Server.Models
     {
         public Projects()
         {
+            ProjectLog = new HashSet<ProjectLog>();
             Tasks = new HashSet<Tasks>();
         }
 
@@ -33,6 +34,7 @@ namespace TimeTracker.Server.Models
         public bool Deleted { get; set; }
 
         public virtual ProjectCloseouts ProjectCloseouts { get; set; }
+        public virtual ICollection<ProjectLog> ProjectLog { get; set; }
         public virtual ICollection<Tasks> Tasks { get; set; }
     }
 }

@@ -6,6 +6,7 @@ namespace TimeTracker.Client.Services
     interface IProjectService: ICRUDService<ProjectDto>
     {
         public Task<ProjectDashboardDto[]> GetProjectDashboard();
+        public Task<ProjectLogHistoryDto[]> GetProjectDashboardHistory(int Id);
         public Task<string[]> GetProjectTemplates();
         public Task UpdateProjectLog(ProjectLogDto dto);
     }

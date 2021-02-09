@@ -1,5 +1,7 @@
 ﻿@page "/project-dashboard"
+
 @using System.Globalization
+
 @inject IProjectService service
 @inject IJSRuntime js
 
@@ -45,7 +47,7 @@ else
                     <td>@project.ReferenceProcesses</td>
                     <td>@project.Lead</td>
                     <td>
-                        <button class="btn btn-success" @onclick="@(() => History(project.Id))">History</button>
+                        <button class="btn btn-success" @onclick="@(() => History(project))">History</button>
                         <button class="btn btn-success" @onclick="@(() => Summary(project.Id))">Summary</button>
                         @if (String.Equals(project.ProjectLog, "Closeout", StringComparison.OrdinalIgnoreCase))
                         {
@@ -86,10 +88,16 @@ else
     </div>
 }
 
+<HistoryDialog @ref="historyDialog" Title="@title"></HistoryDialog>
+
 @code {
     public ProjectDashboardDto[] projects { get; set; }
     public bool ProjectLogDialog { get; set; }
     public ProjectLogDto projectLogDto { get; set; }
+
+    private HistoryDialog historyDialog;
+    private int id;
+    private string title;
 
     protected override async Task OnInitializedAsync()
     {
@@ -120,9 +128,10 @@ else
         Close();
     }
 
-    private void History(int Id)
+    private void History(ProjectDashboardDto project)
     {
-
+        title = project.Title;
+        historyDialog.Show(project.Id);
     }
 
     private void Summary(int Id)

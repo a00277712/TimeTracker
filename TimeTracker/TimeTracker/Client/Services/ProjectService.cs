@@ -44,6 +44,11 @@ namespace TimeTracker.Client.Services
             return await http.GetFromJsonAsync<ProjectDashboardDto[]>($"api/projects/dashboard");
         }
 
+        public async Task<ProjectLogHistoryDto[]> GetProjectDashboardHistory(int Id)
+        {
+            return await http.GetFromJsonAsync<ProjectLogHistoryDto[]>($"api/projects/dashboard/history/" + Id);
+        }
+
         public async Task<string[]> GetProjectTemplates()
         {
             return await http.GetFromJsonAsync<string[]>($"api/projects/templates");
