@@ -13,10 +13,11 @@
 
 @code {
     [Parameter] public string id { get; set; }
-    UserDto user = new UserDto();
-    RolesDialog rolesDialog; 
+    private UserDto user = new UserDto();
+    private RolesDialog rolesDialog;
 
-    void ViewRoles(){
+    void ViewRoles()
+    {
         rolesDialog.Show();
     }
 
@@ -32,4 +33,4 @@
         await service.Edit(user);
         uriHelper.NavigateTo("users");
     }
-    }
+}
