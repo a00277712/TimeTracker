@@ -58,6 +58,17 @@ namespace TimeTracker.Server.Controllers
         }
 
         [HttpGet]
+        [Route("api/projects/dashboard/summary/{Id}")]
+        public IActionResult GetProjectDashboardSummary(int Id)
+        {
+            using var db = new ModelContext();
+            return Ok(db.VwTimeProjectUser
+                .Where(x => x.Id == Id)
+                .OrderByDescending(x => x.UserName)
+                .ToList());
+        }
+
+        [HttpGet]
         [Route("api/projects/templates")]
         public IActionResult GetProjectTemplates()
         {

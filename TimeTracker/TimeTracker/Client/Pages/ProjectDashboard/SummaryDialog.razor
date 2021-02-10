@@ -1,0 +1,83 @@
+﻿@using System.Globalization
+@using TimeTracker.Client.Models
+
+@inject HttpClient http
+@inject IProjectService service
+
+@attribute [Authorize]
+
+@if (ShowDialog)
+{
+    <div class="modal fade show d-block" id="rolesModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog history-model" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titleLabel">@Title</h5>
+                    <button type="button" class="close" @onclick="@Close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @if (Summary == null)
+                    {
+                        <text>Loading...</text>
+                    }
+                    else if (Summary.Length == 0)
+                    {
+                        <text>No Time Found</text>
+                    }
+                    else
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Hours</th>
+                                    <th>Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Summary)
+                                {
+                                    <tr>
+                                        <td>@item.UserName</td>
+                                        <td>@item.Hrs</td>
+                                        <td>@(item.Hrs / 8)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string Title { get; set; }
+
+    public VwTimeProjectUserDto[] Summary { get; set; }
+    public bool ShowDialog { get; set; }
+
+    private async Task LoadData(int Id)
+    {
+        Summary = null;
+        StateHasChanged();
+        Summary = await service.GetProjectDashboardSummary(Id);
+        StateHasChanged();
+    }
+
+    public void Show(int Id)
+    {
+        LoadData(Id);
+        ShowDialog = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ShowDialog = false;
+        StateHasChanged();
+    }
+}

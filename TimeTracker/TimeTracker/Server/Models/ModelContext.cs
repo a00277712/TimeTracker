@@ -44,6 +44,7 @@ namespace TimeTracker.Server.Models
         public virtual DbSet<VwProjectDashboard> VwProjectDashboard { get; set; }
         public virtual DbSet<VwTasks> VwTasks { get; set; }
         public virtual DbSet<VwTime> VwTime { get; set; }
+        public virtual DbSet<VwTimeProjectUser> VwTimeProjectUser { get; set; }
         public virtual DbSet<VwUserRoles> VwUserRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -587,6 +588,19 @@ namespace TimeTracker.Server.Models
                     .HasMaxLength(450);
 
                 entity.Property(e => e.WorkDate).HasColumnType("date");
+            });
+
+            modelBuilder.Entity<VwTimeProjectUser>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwTimeProjectUser");
+
+                entity.Property(e => e.Hrs)
+                    .HasColumnName("hrs")
+                    .HasColumnType("numeric(38, 2)");
+
+                entity.Property(e => e.UserName).HasMaxLength(512);
             });
 
             modelBuilder.Entity<VwUserRoles>(entity =>

@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using TimeTracker.Client.Models;
 using TimeTracker.Shared.Models;
 
 namespace TimeTracker.Client.Services
@@ -47,6 +48,11 @@ namespace TimeTracker.Client.Services
         public async Task<ProjectLogHistoryDto[]> GetProjectDashboardHistory(int Id)
         {
             return await http.GetFromJsonAsync<ProjectLogHistoryDto[]>($"api/projects/dashboard/history/" + Id);
+        }
+
+        public async Task<VwTimeProjectUserDto[]> GetProjectDashboardSummary(int Id)
+        {
+            return await http.GetFromJsonAsync<VwTimeProjectUserDto[]>($"api/projects/dashboard/summary/" + Id);
         }
 
         public async Task<string[]> GetProjectTemplates()

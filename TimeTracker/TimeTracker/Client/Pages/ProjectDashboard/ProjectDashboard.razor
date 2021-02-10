@@ -48,7 +48,7 @@ else
                     <td>@project.Lead</td>
                     <td>
                         <button class="btn btn-success" @onclick="@(() => History(project))">History</button>
-                        <button class="btn btn-success" @onclick="@(() => Summary(project.Id))">Summary</button>
+                        <button class="btn btn-success" @onclick="@(() => Summary(project))">Summary</button>
                         <AuthorizeView Roles="Setup">
                             @if (String.Equals(project.ProjectLog, "Closeout", StringComparison.OrdinalIgnoreCase))
                             {
@@ -92,14 +92,17 @@ else
 
 <HistoryDialog @ref="historyDialog" Title="@title"></HistoryDialog>
 
+<SummaryDialog @ref="summaryDialog" Title="@title"></SummaryDialog>
+
 @code {
     public ProjectDashboardDto[] projects { get; set; }
     public bool ProjectLogDialog { get; set; }
     public ProjectLogDto projectLogDto { get; set; }
 
     private HistoryDialog historyDialog;
-    private int id;
     private string title;
+
+    private SummaryDialog summaryDialog;
 
     protected override async Task OnInitializedAsync()
     {
@@ -136,8 +139,9 @@ else
         historyDialog.Show(project.Id);
     }
 
-    private void Summary(int Id)
+    private void Summary(ProjectDashboardDto project)
     {
-
+        title = project.Title;
+        summaryDialog.Show(project.Id);
     }
 }
