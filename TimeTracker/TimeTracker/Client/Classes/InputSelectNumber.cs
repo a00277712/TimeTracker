@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+﻿//https://github.com/dotnet/aspnetcore/issues/11181
+
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace TimeTracker.Client.Classes
 {
