@@ -139,9 +139,9 @@ namespace TimeTracker.Server.Controllers
                         Deleted = false
                     });
                 }
-            }
 
-            db.SaveChanges();
+                db.SaveChanges();
+            }
 
             return Ok();
         }

@@ -1,6 +1,11 @@
 ﻿@page "/project/tasks/{projectId}"
+
 @inject ITaskService service
 @inject IJSRuntime js
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize(Roles = "Setup")]
 
 <h3>Tasks</h3>
@@ -49,12 +54,17 @@ else
     [Parameter] public string projectId { get; set; }
     private TaskDto[] tasks;
 
+    protected override void OnInitialized()
+    {
+        Interceptor.RegisterEvent();
+    }
+
     protected async override Task OnParametersSetAsync()
     {
         tasks = await service.GetByProjectId(projectId);
     }
 
-    async Task Delete(int Id)
+    private async Task Delete(int Id)
     {
         var task = tasks.First(x => x.Id == Id);
         if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete task: {task.Title}?"))
@@ -63,4 +73,6 @@ else
             tasks = await service.GetByProjectId(projectId);
         }
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

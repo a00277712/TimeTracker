@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using TimeTracker.Shared.Models;
@@ -37,7 +34,7 @@ namespace TimeTracker.Client.Services
             return await http.GetFromJsonAsync<TaskDto[]>("api/project/task");
         }
 
-        public async Task<TaskDto> GetById(string id)
+        public async Task<TaskDto> GetById(int id)
         {
             return await http.GetFromJsonAsync<TaskDto>($"api/project/task/{id}");
         }

@@ -1,7 +1,12 @@
 ﻿@page "/"
+
 @inject ITimeService timeService
 @inject IProjectService projectService
 @inject IJSRuntime js
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize]
 
 <h3>Time</h3>
@@ -97,6 +102,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Interceptor.RegisterEvent();
         projects = await projectService.Get();
         await GetTimeSpent(DateTime.Now);
     }
@@ -117,7 +123,7 @@ else
         times = await response.Content.ReadFromJsonAsync<VwTimeDto[]>();
     }
 
-    async Task DeleteTime(int Id)
+    private async Task DeleteTime(int Id)
     {
         if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete this time?"))
         {
@@ -125,4 +131,6 @@ else
             await GetTimeSpent(workDate);
         }
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

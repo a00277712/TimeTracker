@@ -1,6 +1,6 @@
 ﻿namespace TimeTracker.Shared.Models
 {
-    class MonthSummaryByUserDto
+    public class MonthSummaryByUserDto
     {
         public string Customer { get; set; }
         public string ProjectCode { get; set; }

@@ -1,6 +1,11 @@
 ﻿@page "/project/task/create/{projectId}"
+
 @inject ITaskService service
 @inject NavigationManager uriHelper
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize(Roles = "Setup")]
 
 <h3>Create</h3>
@@ -12,6 +17,11 @@
 
     TaskDto task;
 
+    protected override void OnInitialized()
+    {
+        Interceptor.RegisterEvent();
+    }
+
     protected override void OnParametersSet()
     {
         task = new TaskDto
@@ -20,9 +30,11 @@
         };
     }
 
-    async Task CreateTask()
+    private async Task CreateTask()
     {
         await service.Create(task);
         uriHelper.NavigateTo("project/tasks/" + projectId);
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

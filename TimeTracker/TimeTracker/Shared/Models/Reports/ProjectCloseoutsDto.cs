@@ -2,7 +2,7 @@
 
 namespace TimeTracker.Shared.Models.Reports
 {
-    class ProjectCloseoutsDto
+    public class ProjectCloseoutsDto
     {
         public string ProjectCode { get; set; }
         public string ProjectTitle { get; set; }

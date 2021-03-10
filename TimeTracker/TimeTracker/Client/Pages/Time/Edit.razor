@@ -1,6 +1,11 @@
-﻿@page "/time/edit/{id}"
+﻿@page "/time/edit/{id:int}"
+
 @inject ITimeService service
 @inject NavigationManager uriHelper
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize]
 
 <h3>Edit</h3>
@@ -9,17 +14,24 @@
       OnValidSubmit="@EditTask" />
 
 @code {
-    [Parameter] public string id { get; set; }
+    [Parameter] public int id { get; set; }
     TimeDto time = new TimeDto();
+
+    protected override void OnInitialized()
+    {
+        Interceptor.RegisterEvent();
+    }
 
     protected async override Task OnParametersSetAsync()
     {
         time = await service.GetById(id);
     }
 
-    async Task EditTask()
+    private async Task EditTask()
     {
         await service.Edit(time);
         uriHelper.NavigateTo("/");
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

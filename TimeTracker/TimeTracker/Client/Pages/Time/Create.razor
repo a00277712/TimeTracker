@@ -1,6 +1,11 @@
 ﻿@page "/time/create/{taskId}"
+
 @inject ITimeService service
 @inject NavigationManager uriHelper
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize]
 
 <h3>Create</h3>
@@ -13,6 +18,11 @@
 
     TimeDto time;
 
+    protected override void OnInitialized()
+    {
+        Interceptor.RegisterEvent();
+    }
+
     protected override void OnParametersSet()
     {
         time = new TimeDto
@@ -22,9 +32,11 @@
         };
     }
 
-    async Task CreateTask()
+    private async Task CreateTask()
     {
         await service.Create(time);
         uriHelper.NavigateTo("/");
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

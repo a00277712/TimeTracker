@@ -4,6 +4,9 @@
 
 @inject IProjectService service
 @inject IJSRuntime js
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
 
 <h3>Project Dashboard</h3>
 
@@ -52,7 +55,7 @@ else
                         <AuthorizeView Roles="Setup">
                             @if (String.Equals(project.ProjectLog, "Closeout", StringComparison.OrdinalIgnoreCase))
                             {
-                                <a class="btn btn-success" href="projects/closeout/@project.Id">Closeout</a>
+                                <a class="btn btn-success" href="project-closeout/@project.Id">Closeout</a>
                             }
                         </AuthorizeView>
                     </td>
@@ -106,6 +109,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Interceptor.RegisterEvent();
         projects = await service.GetProjectDashboard();
     }
 
@@ -144,4 +148,6 @@ else
         title = project.Title;
         summaryDialog.Show(project.Id);
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

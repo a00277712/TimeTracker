@@ -2,7 +2,7 @@
 
 namespace TimeTracker.Shared.Models
 {
-    class HoursEnteredDto
+    public class HoursEnteredDto
     {
         public string ProjectCode { get; set; }
         public string ProjectTitle { get; set; }

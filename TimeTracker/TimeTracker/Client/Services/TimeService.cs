@@ -42,7 +42,7 @@ namespace TimeTracker.Client.Services
             return await http.PostAsJsonAsync("api/times/", new DateDto { Date = date });
         }
 
-        public async Task<TimeDto> GetById(string id)
+        public async Task<TimeDto> GetById(int id)
         {
             return await http.GetFromJsonAsync<TimeDto>($"api/time/{id}");
         }

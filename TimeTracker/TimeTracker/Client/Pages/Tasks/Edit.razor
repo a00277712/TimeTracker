@@ -1,6 +1,11 @@
-﻿@page "/tasks/edit/{id}"
+﻿@page "/tasks/edit/{id:int}"
+
 @inject ITaskService service
 @inject NavigationManager uriHelper
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize(Roles = "Setup")]
 
 <h3>Edit</h3>
@@ -8,17 +13,24 @@
 <Form ButtonText="Edit" task="@task" OnValidSubmit="@EditTask" />
 
 @code {
-    [Parameter] public string id { get; set; }
+    [Parameter] public int id { get; set; }
     TaskDto task = new TaskDto();
+
+    protected override void OnInitialized()
+    {
+        Interceptor.RegisterEvent();
+    }
 
     protected async override Task OnParametersSetAsync()
     {
         task = await service.GetById(id);
     }
 
-    async Task EditTask()
+    private async Task EditTask()
     {
         await service.Edit(task);
         uriHelper.NavigateTo("project/tasks/" + task.ProjectId);
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

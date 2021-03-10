@@ -1,6 +1,11 @@
 ﻿@page "/users"
+
 @inject IJSRuntime js
 @inject ISetupUserService service
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize(Roles = "Setup")]
 
 <h3>Users</h3>
@@ -53,10 +58,11 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Interceptor.RegisterEvent();
         users = await service.Get();
     }
 
-    async Task Delete(string id)
+    private async Task Delete(string id)
     {
         var user = users.First(x => x.Id == id);
         if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {user.UserName}'s Account?"))
@@ -65,4 +71,6 @@ else
             await OnInitializedAsync();
         }
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

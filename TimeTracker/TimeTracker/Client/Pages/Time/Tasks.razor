@@ -1,5 +1,10 @@
 ﻿@page "/time/tasks/{projectId}"
+
 @inject ITaskService taskService
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize]
 
 <h3>Tasks</h3>
@@ -40,8 +45,15 @@ else
     [Parameter] public string projectId { get; set; }
     private TaskDto[] tasks;
 
+    protected override void OnInitialized()
+    {
+        Interceptor.RegisterEvent();
+    }
+
     protected async override Task OnParametersSetAsync()
     {
         tasks = await taskService.GetByProjectId(projectId);
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

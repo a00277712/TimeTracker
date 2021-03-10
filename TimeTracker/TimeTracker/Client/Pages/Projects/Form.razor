@@ -110,7 +110,7 @@
     <div class="form-check">
         <div>
             <div>
-                <input type="checkbox" class="form-check-input" @bind="project.DataProcessing" id="dataProcessing"/>
+                <input type="checkbox" class="form-check-input" @bind="project.DataProcessing" id="dataProcessing" />
                 <ValidationMessage For="@(() => project.DataProcessing)" />
             </div>
             <label class="form-check-label" for="dataProcessing">Data Processing:</label>
@@ -167,14 +167,15 @@
 </EditForm>
 
 @code {
-        [Parameter] public ProjectDto project { get; set; }
-        [Parameter] public string ButtonText { get; set; } = "Save";
-        [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public ProjectDto project { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
 
     private UserDto[] usersList;
     private string[] templateList;
 
-    protected override async Task OnInitializedAsync() {
+    protected override async Task OnInitializedAsync()
+    {
         usersList = await userService.Get();
         templateList = await service.GetProjectTemplates();
     }

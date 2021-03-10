@@ -1,7 +1,12 @@
 ﻿@page "/users/create"
+
 @inject HttpClient http
 @inject NavigationManager uriHelper
 @inject ISetupUserService service
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize(Roles = "Setup")]
 
 <h3>Create</h3>
@@ -10,9 +15,17 @@
 
 @code {
     UserDto user = new UserDto();
-    async Task CreateUser()
+
+    protected override void OnInitialized()
+    {
+        Interceptor.RegisterEvent();
+    }
+
+    public async Task CreateUser()
     {
         await service.Create(user);
         uriHelper.NavigateTo("users");
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

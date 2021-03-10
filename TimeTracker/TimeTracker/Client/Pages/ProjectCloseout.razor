@@ -1,0 +1,303 @@
+﻿@page "/project-closeout/{id:int}"
+
+@inject NavigationManager uriHelper
+@inject IProjectCloseoutService service
+@inject IProjectService projectService
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
+@attribute [Authorize(Roles = "Setup")]
+<h3>Project Closeout</h3>
+
+<EditForm Model="@projectCloseout" OnValidSubmit="@OnValidSubmit">
+    <FluentValidationValidator />
+    <DataAnnotationsValidator />
+    @if (project != null)
+    {
+        <div>
+            @project.Code - @project.Title
+        </div>
+    }
+
+    <div class="form-group">
+        <div>
+            <label>Closeout Reason:</label>
+            <div>
+                <InputSelectNumber @bind-Value="projectCloseout.CloseoutReasonId">
+                    <option hidden>--</option>
+                    @if (vw != null)
+                    {
+                        @foreach (var item in vw.CloseoutReasons)
+                        {
+                            <option value="@item.Id">@item.Text</option>
+                        }
+                    }
+                </InputSelectNumber>
+                <ValidationMessage For="@(() => projectCloseout.CloseoutReasonId)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-check">
+        <div>
+            <div>
+                <input type="checkbox" class="form-check-input" @bind="projectCloseout.CommercialMilestonesComplete" id="commercialMilestonesComplete" />
+                <ValidationMessage For="@(() => projectCloseout.CommercialMilestonesComplete)" />
+            </div>
+            <label class="form-check-label" for="commercialMilestonesComplete">Commercial Milestones Complete:</label>
+        </div>
+    </div>
+
+    <div class="form-check">
+        <div>
+            <div>
+                <input type="checkbox" class="form-check-input" @bind="projectCloseout.DeliverablesComplete" id="deliverablesComplete" />
+                <ValidationMessage For="@(() => projectCloseout.DeliverablesComplete)" />
+            </div>
+            <label class="form-check-label" for="deliverablesComplete">Deliverables Complete:</label>
+        </div>
+    </div>
+
+    <div class="form-check">
+        <div>
+            <div>
+                <input type="checkbox" class="form-check-input" @bind="projectCloseout.CustomerFeedback" id="customerFeedback" />
+                <ValidationMessage For="@(() => projectCloseout.CustomerFeedback)" />
+            </div>
+            <label class="form-check-label" for="dataProcessing">Confirm Customer Feedback Received:</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Insert Customer Feedback:</label>
+            <div>
+                <InputTextArea @bind-Value="projectCloseout.FeedBack" />
+                <ValidationMessage For="@(() => projectCloseout.FeedBack)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Customer Data Management:</label>
+            <div>
+                <InputTextArea @bind-Value="projectCloseout.CustomerDataManagement" />
+                <ValidationMessage For="@(() => projectCloseout.CustomerDataManagement)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Sales Learnings:</label>
+            <div>
+                <InputTextArea @bind-Value="projectCloseout.SalesLearnings" />
+                <ValidationMessage For="@(() => projectCloseout.SalesLearnings)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Ops Learnings:</label>
+            <div>
+                <InputTextArea @bind-Value="projectCloseout.OpsLearnings" />
+                <ValidationMessage For="@(() => projectCloseout.OpsLearnings)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Learning Actions:</label>
+            <div>
+                <InputTextArea @bind-Value="projectCloseout.LearningActions" />
+                <ValidationMessage For="@(() => projectCloseout.LearningActions)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Follow Up Actions:</label>
+            <div>
+                <InputTextArea @bind-Value="projectCloseout.FollowUpActions" />
+                <ValidationMessage For="@(() => projectCloseout.FollowUpActions)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Commercial Score:</label>
+            <div>
+                <InputSelectNumber @bind-Value="projectCloseout.CommercialScoreId">
+                    <option hidden>--</option>
+                    @if (vw != null)
+                    {
+                        @foreach (var item in vw.CommercialScores)
+                        {
+                            <option value="@item.Id">@item.Text - @item.Score</option>
+                        }
+                    }
+                </InputSelectNumber>
+                <ValidationMessage For="@(() => projectCloseout.CommercialScoreId)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Operational Score:</label>
+            <div>
+                <InputSelectNumber @bind-Value="projectCloseout.OperationalScoreId">
+                    <option hidden>--</option>
+                    @if (vw != null)
+                    {
+                        @foreach (var item in vw.OperationalScores)
+                        {
+                            <option value="@item.Id">@item.Text - @item.Score</option>
+                        }
+                    }
+                </InputSelectNumber>
+                <ValidationMessage For="@(() => projectCloseout.OperationalScoreId)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Bus. Dev. Score:</label>
+            <div>
+                <InputSelectNumber @bind-Value="projectCloseout.BusinessDevelopmentScoreId">
+                    <option hidden>--</option>
+                    @if (vw != null)
+                    {
+                        @foreach (var item in vw.BusDevScores)
+                        {
+                            <option value="@item.Id">@item.Text - @item.Score</option>
+                        }
+                    }
+                </InputSelectNumber>
+                <ValidationMessage For="@(() => projectCloseout.BusinessDevelopmentScoreId)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Reputational Score:</label>
+            <div>
+                <InputSelectNumber @bind-Value="projectCloseout.ReputationalScoreId">
+                    <option hidden>--</option>
+                    @if (vw != null)
+                    {
+                        @foreach (var item in vw.RepScores)
+                        {
+                            <option value="@item.Id">@item.Text - @item.Score</option>
+                        }
+                    }
+                </InputSelectNumber>
+                <ValidationMessage For="@(() => projectCloseout.ReputationalScoreId)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Resource Profile Score:</label>
+            <div>
+                <InputSelectNumber @bind-Value="projectCloseout.ResourceProfileScoreId">
+                    <option hidden>--</option>
+                    @if (vw != null)
+                    {
+                        @foreach (var item in vw.ResProfScores)
+                        {
+                            <option value="@item.Id">@item.Text - @item.Score</option>
+                        }
+                    }
+                </InputSelectNumber>
+                <ValidationMessage For="@(() => projectCloseout.ResourceProfileScoreId)" />
+            </div>
+        </div>
+    </div>
+
+    <div>
+        Score: @CalcProjectScore()
+    </div>
+
+    <div class="form-check">
+        <div>
+            <div>
+                <input type="checkbox" class="form-check-input" @bind="projectCloseout.DataPurged" id="dataPurged" />
+                <ValidationMessage For="@(() => projectCloseout.DataPurged)" />
+            </div>
+            <label class="form-check-label" for="dataPurged">Data Purged:</label>
+        </div>
+    </div>
+
+    <div class="form-check">
+        <div>
+            <div>
+                <input type="checkbox" class="form-check-input" @bind="projectCloseout.CaseStudy" id="caseStudy" />
+                <ValidationMessage For="@(() => projectCloseout.CaseStudy)" />
+            </div>
+            <label class="form-check-label" for="caseStudy">Case Study:</label>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Submit
+    </button>
+</EditForm>
+
+@code {
+    [Parameter] public int id { get; set; }
+
+    private ProjectCloseoutDto projectCloseout = new ProjectCloseoutDto();
+    private ProjectDto project;
+    private ProjectCloseoutVw vw;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Interceptor.RegisterEvent();
+        project = await projectService.GetById(id);
+        vw = await service.GetVwAsync();
+    }
+
+    protected override void OnParametersSet()
+    {
+        projectCloseout.ProjectId = id;
+    }
+
+    private async Task OnValidSubmit()
+    {
+        projectCloseout.ProjectScore = CalcProjectScore();
+
+        await service.Create(projectCloseout);
+
+        uriHelper.NavigateTo("project-dashboard");
+    }
+
+    private int CalcProjectScore()
+    {
+        if (vw != null)
+        {
+            var CommercialScore = vw.CommercialScores.FirstOrDefault(x => x.Id == projectCloseout.CommercialScoreId)?.Score;
+            var OperationalScore = vw.OperationalScores.FirstOrDefault(x => x.Id == projectCloseout.OperationalScoreId)?.Score;
+            var BusDevScore = vw.BusDevScores.FirstOrDefault(x => x.Id == projectCloseout.BusinessDevelopmentScoreId)?.Score;
+            var ReputationalScore = vw.RepScores.FirstOrDefault(x => x.Id == projectCloseout.ReputationalScoreId)?.Score;
+            var ResourceProfileScore = vw.ResProfScores.FirstOrDefault(x => x.Id == projectCloseout.ResourceProfileScoreId)?.Score;
+
+            return (CommercialScore != null ? CommercialScore.Value : 0) + (OperationalScore != null ? OperationalScore.Value : 0) + (BusDevScore != null ? BusDevScore.Value : 0) + (ReputationalScore != null ? ReputationalScore.Value : 0) + (ResourceProfileScore != null ? ResourceProfileScore.Value : 0);
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public void Dispose() => Interceptor.DisposeEvent();
+}

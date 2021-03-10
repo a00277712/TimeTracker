@@ -3,6 +3,9 @@
 
 @inject HttpClient http
 @inject IProjectService service
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
 
 @attribute [Authorize]
 
@@ -60,6 +63,11 @@
     public VwTimeProjectUserDto[] Summary { get; set; }
     public bool ShowDialog { get; set; }
 
+    protected override void OnInitialized()
+    {
+        Interceptor.RegisterEvent();
+    }
+
     private async Task LoadData(int Id)
     {
         Summary = null;
@@ -80,4 +88,6 @@
         ShowDialog = false;
         StateHasChanged();
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

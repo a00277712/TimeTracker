@@ -8,6 +8,6 @@ namespace TimeTracker.Client.Services
         public Task Delete(int id);
         public Task Edit(T user);
         public Task<T[]> Get();
-        public Task<T> GetById(string id);
+        public Task<T> GetById(int id);
     }
 }

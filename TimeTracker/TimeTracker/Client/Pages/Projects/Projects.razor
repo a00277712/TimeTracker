@@ -1,7 +1,13 @@
 ﻿@page "/projects"
+
 @using System.Globalization
+
 @inject IProjectService service
 @inject IJSRuntime js
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize(Roles = "Setup")]
 
 <h3>Projects</h3>
@@ -60,6 +66,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Interceptor.RegisterEvent();
         projects = await service.Get();
     }
 
@@ -72,4 +79,6 @@ else
             await OnInitializedAsync();
         }
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

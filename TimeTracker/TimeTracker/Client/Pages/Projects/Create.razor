@@ -1,6 +1,11 @@
 ﻿@page "/projects/create"
+
 @inject NavigationManager uriHelper
 @inject IProjectService service
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize(Roles = "Setup")]
 
 <h3>Create</h3>
@@ -9,9 +14,17 @@
 
 @code {
     ProjectDto project = new ProjectDto();
+
+    protected override void OnInitialized()
+    {
+        Interceptor.RegisterEvent();
+    }
+
     async Task CreateProject()
     {
         await service.Create(project);
         uriHelper.NavigateTo("projects");
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

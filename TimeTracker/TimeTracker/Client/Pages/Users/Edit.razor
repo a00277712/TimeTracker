@@ -1,6 +1,11 @@
 ﻿@page "/users/edit/{id}"
+
 @inject NavigationManager uriHelper
 @inject ISetupUserService service
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize(Roles = "Setup")]
 
 <h3>Create</h3>
@@ -13,12 +18,13 @@
 
 @code {
     [Parameter] public string id { get; set; }
+
     private UserDto user = new UserDto();
     private RolesDialog rolesDialog;
 
-    void ViewRoles()
+    protected override void OnInitialized()
     {
-        rolesDialog.Show();
+        Interceptor.RegisterEvent();
     }
 
     protected async override Task OnParametersSetAsync()
@@ -28,9 +34,16 @@
         user.OldEmail = user.Email;
     }
 
-    async Task EditUser()
+    private void ViewRoles()
+    {
+        rolesDialog.Show();
+    }
+
+    private async Task EditUser()
     {
         await service.Edit(user);
         uriHelper.NavigateTo("users");
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }

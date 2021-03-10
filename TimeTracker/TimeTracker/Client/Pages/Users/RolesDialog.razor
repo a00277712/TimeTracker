@@ -1,5 +1,9 @@
 ﻿@inject HttpClient http
 @inject ISetupUserService service
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
 @attribute [Authorize(Roles = "Setup")]
 
 @if (ShowDialog)
@@ -45,6 +49,11 @@
     public VwUserRole[] roles { get; set; }
     public bool ShowDialog { get; set; }
 
+    protected override void OnInitialized()
+    {
+        Interceptor.RegisterEvent();
+    }
+
     protected async override Task OnParametersSetAsync()
     {
         roles = await service.GetRolesByUserId(userId);
@@ -67,4 +76,6 @@
         ShowDialog = false;
         StateHasChanged();
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }
