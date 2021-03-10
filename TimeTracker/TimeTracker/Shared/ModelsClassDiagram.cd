@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="TimeTracker.Shared.Models.BillableTypeDto">
+    <Position X="0.5" Y="1" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAAAAAIAAEAAAAAAAAAAABAAECAAAAAA=</HashCode>
+      <FileName>Models\BillableTypeDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Shared.Models.DateDto">
+    <Position X="3" Y="3" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Models\DateDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Shared.Models.ProjectDashboardDto">
+    <Position X="5.25" Y="1" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAEAAAAAgQAAgAAAAAAAAACAIAEAAIAQ=</HashCode>
+      <FileName>Models\ProjectDashboardDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Shared.Models.ProjectDto">
+    <Position X="7.75" Y="1" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAEiAAAAAAAgAGAAIAAkEAAgAAABhAgAAAQAAEIAIAQ=</HashCode>
+      <FileName>Models\ProjectDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Shared.Models.ProjectLogDto">
+    <Position X="3" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAAAAAAAAAAAABAAAAAAAAAAECAAAAAA=</HashCode>
+      <FileName>Models\ProjectLogDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Shared.Models.TaskDto">
+    <Position X="3" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAEAAABAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\TaskDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Shared.Models.TimeDto">
+    <Position X="0.5" Y="3.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEACAQAAAAAIIAEAgAAAgAAAAQBAAEAAgAAAA=</HashCode>
+      <FileName>Models\TimeDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Shared.Models.UserDto">
+    <Position X="5.25" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAAAAAAgAQAAAAAAAAAAAAQAEAAAAAAA=</HashCode>
+      <FileName>Models\UserDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Shared.Models.VwTimeDto">
+    <Position X="9.75" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAABQAAAAAAIAAAAAAAAAgAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Models\VwTimeDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Shared.Models.VwUserRole">
+    <Position X="3" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEAAAAgA=</HashCode>
+      <FileName>Models\VwUserRole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Shared.Models.ProjectCloseoutDto">
+    <Position X="9.75" Y="1" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAKAICAIAAACAAAAACACABBIEAABAAAgggAABIAAA=</HashCode>
+      <FileName>Models\ProjectCloseoutDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="TimeTracker.Server.Controllers.BillableTypeController">
+    <Position X="5.75" Y="3.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\BillableTypeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Server.Controllers.ProjectsController">
+    <Position X="4.5" Y="5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>QQAAAAAEAABQAABAAAAAAAAAAAEAAEACQAAAgAAEAAA=</HashCode>
+      <FileName>Controllers\ProjectsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Server.Controllers.ProjectTasksController">
+    <Position X="3" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAABAAAAAAAAAAAEAAEACAAAIAAAAAAA=</HashCode>
+      <FileName>Controllers\ProjectTasksController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Server.Controllers.SetupUserRolesController">
+    <Position X="5.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\SetupUserRolesController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Server.Controllers.SetupUsersController">
+    <Position X="0.5" Y="5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>IQAABAAAAABABAAAAAAAAAAAAAGAAEACAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\SetupUsersController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Server.Controllers.TimeController">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAAAAkAAEACAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\TimeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Server.Controllers.Reports.HoursEnteredController">
+    <Position X="3" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Reports\HoursEnteredController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Server.Controllers.Reports.MonthSummaryController">
+    <Position X="0.5" Y="2.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Reports\MonthSummaryController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeTracker.Server.Controllers.Reports.ProjectCloseoutsController">
+    <Position X="5.75" Y="2" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Reports\ProjectCloseoutsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
