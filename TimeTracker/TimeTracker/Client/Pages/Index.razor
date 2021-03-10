@@ -103,7 +103,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         Interceptor.RegisterEvent();
-        projects = await projectService.Get();
+        projects = await projectService.GetActive();
         await GetTimeSpent(DateTime.Now);
     }
 

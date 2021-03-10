@@ -35,6 +35,11 @@ namespace TimeTracker.Client.Services
             return await http.GetFromJsonAsync<ProjectDto[]>("api/projects");
         }
 
+        public async Task<ProjectDto[]> GetActive()
+        {
+            return await http.GetFromJsonAsync<ProjectDto[]>("api/projects/active");
+        }
+
         public async Task<ProjectDto> GetById(int id)
         {
             return await http.GetFromJsonAsync<ProjectDto>($"api/projects/{id}");

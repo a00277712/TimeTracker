@@ -1,0 +1,165 @@
+﻿@page "/report/month-summary"
+
+@using TimeTracker.Client.Models
+
+@inject IReportService Service
+@inject ISetupUserService userService
+@inject IProjectService projectService
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
+<h3>Month Summary Report</h3>
+
+<EditForm Model="@para" OnValidSubmit="@Get">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <div>
+            <label>Month:</label>
+            <div>
+                <InputSelectNumber @bind-Value="para.Month">
+                    <option hidden>--</option>
+                    @if (months != null)
+                    {
+                        @foreach (var month in months)
+                        {
+                            <option value="@month.Value">@month.Text</option>
+                        }
+                    }
+                </InputSelectNumber>
+                <ValidationMessage For="@(() => para.Month)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Username:</label>
+            <div>
+                <InputSelect @bind-Value="para.UserName">
+                    <option selected>All</option>
+                    @if (usersList != null)
+                    {
+                        @foreach (var user in usersList)
+                        {
+                            <option value="@user.UserName">@user.UserName</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => para.UserName)" />
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Submit
+    </button>
+</EditForm>
+
+@if (byUser != null)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Reference Processes</th>
+                <th>UserName</th>
+                <th>Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in byUser)
+            {
+                <tr>
+                    <td>@item.Customer</td>
+                    <td>@item.ProjectCode</td>
+                    <td>@item.ProjectTitle</td>
+                    <td>@item.ReferenceProcesses</td>
+                    <td>@item.UserName</td>
+                    <td>@item.Hours</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (byWeek != null)
+{
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Code</th>
+            <th>Title</th>
+            <th>Reference Processes</th>
+            <th>Week 1</th>
+            <th>Week 2</th>
+            <th>Week 3</th>
+            <th>Week 4</th>
+            <th>Week 5</th>
+            <th>Week 6</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in byWeek)
+        {
+            <tr>
+                <td>@item.Customer</td>
+                <td>@item.ProjectCode</td>
+                <td>@item.ProjectTitle</td>
+                <td>@item.ReferenceProcesses</td>
+                <td>@item.Week1</td>
+                <td>@item.Week2</td>
+                <td>@item.Week3</td>
+                <td>@item.Week4</td>
+                <td>@item.Week5</td>
+                <td>@item.Week6</td>
+                <td>@item.TotalHours</td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+
+@code {
+    private MonthSummaryParams para = new MonthSummaryParams() { UserName = "All" };
+    private List<MonthSummaryByUserDto> byUser;
+    private List<MonthSummaryByWeekDto> byWeek;
+    private UserDto[] usersList;
+
+    private List<ValueText> months = new List<ValueText>() {
+        new ValueText(1, "January"),
+        new ValueText(2, "February"),
+        new ValueText(3, "March"),
+        new ValueText(4, "April"),
+        new ValueText(5, "May"),
+        new ValueText(6, "June"),
+        new ValueText(7, "July"),
+        new ValueText(8, "August"),
+        new ValueText(9, "September"),
+        new ValueText(10, "October"),
+        new ValueText(11, "November"),
+        new ValueText(12, "December")
+    };
+
+    protected async override Task OnInitializedAsync()
+    {
+        Interceptor.RegisterEvent();
+        usersList = await userService.Get();
+    }
+
+    private async Task Get()
+    {
+        using var userResponse = await Service.GetMonthSummaryByUser(para);
+        byUser = await userResponse.Content.ReadFromJsonAsync<List<MonthSummaryByUserDto>>();
+
+        using var weekResponse = await Service.GetMonthSummaryByWeek(para);
+        byWeek = await weekResponse.Content.ReadFromJsonAsync<List<MonthSummaryByWeekDto>>();
+    }
+
+    public void Dispose() => Interceptor.DisposeEvent();
+}

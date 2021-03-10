@@ -1,0 +1,137 @@
+﻿@page "/report/hours-entered"
+
+@using System.Globalization
+
+@inject IReportService Service
+@inject ISetupUserService userService
+@inject IProjectService projectService
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
+<h3>Hours Entered Report</h3>
+
+<EditForm Model="@para" OnValidSubmit="@Get">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <div>
+            <label>Start Date:</label>
+            <div>
+                <InputDate type="date" @bind-Value="para.StartDate" />
+                <ValidationMessage For="@(() => para.StartDate)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>End Date:</label>
+            <div>
+                <InputDate type="date" @bind-Value="para.EndDate" />
+                <ValidationMessage For="@(() => para.EndDate)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Username:</label>
+            <div>
+                <InputSelect @bind-Value="para.UserName">
+                    <option>All</option>
+                    @if (usersList != null)
+                    {
+                        @foreach (var user in usersList)
+                        {
+                            <option value="@user.UserName">@user.UserName</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => para.UserName)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Project Title:</label>
+            <div>
+                <InputSelect @bind-Value="para.ProjectTitle">
+                    <option>All</option>
+                    @if (projectsList != null)
+                    {
+                        @foreach (var item in projectsList)
+                        {
+                            <option value="@item.Title">@item.Code - @item.Title</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => para.ProjectTitle)" />
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Submit
+    </button>
+</EditForm>
+
+@if (items != null)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Client</th>
+                <th>Task Title</th>
+                <th>Username</th>
+                <th>WorkDate</th>
+                <th>Hours</th>
+                <th>Comment</th>
+                <th>Billable Type</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr>
+                    <td>@item.ProjectCode</td>
+                    <td>@item.ProjectTitle</td>
+                    <td>@item.Client</td>
+                    <td>@item.TaskTitle</td>
+                    <td>@item.UserName</td>
+                    <td>@item.WorkDate.ToString("dd/MM/yyyy", CultureInfo.CurrentCulture)</td>
+                    <td>@item.Hours</td>
+                    <td>@item.Comments</td>
+                    <td>@item.BillableType</td>
+                    <td>@item.Location</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private HoursEnteredParams para = new HoursEnteredParams();
+    private List<HoursEnteredDto> items;
+    private UserDto[] usersList;
+    private ProjectDto[] projectsList;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Interceptor.RegisterEvent();
+        usersList = await userService.Get();
+        projectsList = await projectService.GetActive();
+    }
+
+    private async Task Get()
+    {
+        using var response = await Service.GetHoursEntered(para);
+        items = await response.Content.ReadFromJsonAsync<List<HoursEnteredDto>>();
+    }
+
+    public void Dispose() => Interceptor.DisposeEvent();
+}

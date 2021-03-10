@@ -17,10 +17,10 @@ namespace TimeTracker.Server.Controllers.Reports
             using var db = new ModelContext();
             return Ok(db.VwHoursEntered
                 .Where(x => Params.UserName == null ||
-                            Params.UserName == "" ||
+                            Params.UserName == "All" ||
                             x.Username == Params.UserName)
                 .Where(x => Params.ProjectTitle == null ||
-                            Params.ProjectTitle == "" ||
+                            Params.ProjectTitle == "All" ||
                             x.ProjectTitle == Params.ProjectTitle)
                 .Where(x => Params.StartDate == null ||
                             x.WorkDate >= Params.StartDate.Value)

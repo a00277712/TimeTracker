@@ -24,6 +24,18 @@ namespace TimeTracker.Server.Controllers
             return Ok(projects);
         }
 
+        [Route("api/projects/active")]
+        public IActionResult GetActive()
+        {
+            using var db = new ModelContext();
+
+            var projects = db.Projects
+                .Where(x => x.Deleted == false && x.ProjectCloseouts == null)
+                .ToList();
+
+            return Ok(projects);
+        }
+
         [HttpGet]
         [Route("api/projects/{id}")]
         public IActionResult GetProjectById(int id)

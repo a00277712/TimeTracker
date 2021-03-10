@@ -39,6 +39,7 @@ namespace TimeTracker.Client
             builder.Services.AddScoped<IValidateUser, ValidateUser>();
             builder.Services.AddScoped<IValidateProject, ValidateProject>();
             builder.Services.AddScoped<IProjectCloseoutService, ProjectCloseoutService>();
+            builder.Services.AddScoped<IReportService, ReportService>();
             builder.Services.AddScoped<HttpInterceptorService>();
 
             await builder.Build().RunAsync();

@@ -11,8 +11,8 @@
 <h3>Project Closeout</h3>
 
 <EditForm Model="@projectCloseout" OnValidSubmit="@OnValidSubmit">
-    <FluentValidationValidator />
     <DataAnnotationsValidator />
+
     @if (project != null)
     {
         <div>

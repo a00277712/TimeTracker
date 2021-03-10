@@ -11,7 +11,7 @@ namespace TimeTracker.Shared.Models
         public string UserName { get; set; }
         public DateTime WorkDate { get; set; }
         public float Hours { get; set; }
-        public string Comment { get; set; }
+        public string Comments { get; set; }
         public string BillableType { get; set; }
         public string Location { get; set; }
     }

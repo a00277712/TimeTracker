@@ -11,5 +11,6 @@ namespace TimeTracker.Client.Services
         public Task<VwTimeProjectUserDto[]> GetProjectDashboardSummary(int Id);
         public Task<string[]> GetProjectTemplates();
         public Task UpdateProjectLog(ProjectLogDto dto);
+        public Task<ProjectDto[]> GetActive();
     }
 }
