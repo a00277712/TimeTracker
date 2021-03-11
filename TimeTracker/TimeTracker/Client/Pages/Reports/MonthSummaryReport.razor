@@ -7,6 +7,7 @@
 @inject ISetupUserService userService
 @inject IProjectService projectService
 @inject HttpInterceptorService Interceptor
+@inject IJSRuntime JSRuntime
 
 @implements IDisposable
 
@@ -56,10 +57,15 @@
     <button type="submit" class="btn btn-success">
         Submit
     </button>
+
+    <button type="button" class="btn btn-success" @onclick="GetExcel">
+        Excel
+    </button>
 </EditForm>
 
 @if (byUser != null)
 {
+    <h3>By User</h3>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -89,41 +95,42 @@
 
 @if (byWeek != null)
 {
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Customer</th>
-            <th>Code</th>
-            <th>Title</th>
-            <th>Reference Processes</th>
-            <th>Week 1</th>
-            <th>Week 2</th>
-            <th>Week 3</th>
-            <th>Week 4</th>
-            <th>Week 5</th>
-            <th>Week 6</th>
-            <th>Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in byWeek)
-        {
+    <h3>By Week</h3>
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@item.Customer</td>
-                <td>@item.ProjectCode</td>
-                <td>@item.ProjectTitle</td>
-                <td>@item.ReferenceProcesses</td>
-                <td>@item.Week1</td>
-                <td>@item.Week2</td>
-                <td>@item.Week3</td>
-                <td>@item.Week4</td>
-                <td>@item.Week5</td>
-                <td>@item.Week6</td>
-                <td>@item.TotalHours</td>
+                <th>Customer</th>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Reference Processes</th>
+                <th>Week 1</th>
+                <th>Week 2</th>
+                <th>Week 3</th>
+                <th>Week 4</th>
+                <th>Week 5</th>
+                <th>Week 6</th>
+                <th>Total</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in byWeek)
+            {
+                <tr>
+                    <td>@item.Customer</td>
+                    <td>@item.ProjectCode</td>
+                    <td>@item.ProjectTitle</td>
+                    <td>@item.ReferenceProcesses</td>
+                    <td>@item.Week1</td>
+                    <td>@item.Week2</td>
+                    <td>@item.Week3</td>
+                    <td>@item.Week4</td>
+                    <td>@item.Week5</td>
+                    <td>@item.Week6</td>
+                    <td>@item.TotalHours</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
@@ -160,6 +167,20 @@
 
         using var weekResponse = await Service.GetMonthSummaryByWeek(para);
         byWeek = await weekResponse.Content.ReadFromJsonAsync<List<MonthSummaryByWeekDto>>();
+    }
+
+    private async Task GetExcel()
+    {
+        using var response = await Service.GetMonthSummaryExcel(para);
+
+        byte[] byteArray = await response.Content.ReadAsByteArrayAsync();
+
+        await JSRuntime.InvokeVoidAsync("download", new
+        {
+            ByteArray = byteArray,
+            FileName = "MonthSummaryReport.xlsx",
+            ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        });
     }
 
     public void Dispose() => Interceptor.DisposeEvent();

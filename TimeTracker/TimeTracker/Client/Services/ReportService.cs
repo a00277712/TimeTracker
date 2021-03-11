@@ -19,6 +19,11 @@ namespace TimeTracker.Client.Services
             return await http.PostAsJsonAsync("api/reports/hours-entered", para);
         }
 
+        public async Task<HttpResponseMessage> GetHoursEnteredExcel(HoursEnteredParams para)
+        {
+            return await http.PostAsJsonAsync("api/reports/hours-entered/excel", para);
+        }
+
         public async Task<HttpResponseMessage> GetMonthSummaryByUser(MonthSummaryParams para)
         {
             return await http.PostAsJsonAsync("api/reports/month-summary/user", para);
@@ -29,9 +34,19 @@ namespace TimeTracker.Client.Services
             return await http.PostAsJsonAsync("api/reports/month-summary/week", para);
         }
 
+        public async Task<HttpResponseMessage> GetMonthSummaryExcel(MonthSummaryParams para)
+        {
+            return await http.PostAsJsonAsync("api/reports/month-summary/excel", para);
+        }
+
         public async Task<HttpResponseMessage> GetProjectCloseouts(ProjectCloseoutsParams para)
         {
             return await http.PostAsJsonAsync("api/reports/project-closeouts", para);
+        }
+
+        public async Task<HttpResponseMessage> GetProjectCloseoutsExcel(ProjectCloseoutsParams para)
+        {
+            return await http.PostAsJsonAsync("api/reports/project-closeouts/excel", para);
         }
     }
 }

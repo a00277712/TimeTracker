@@ -2,11 +2,13 @@
 
 @using System.Globalization
 @using TimeTracker.Shared.Models.Reports
+@using Microsoft.JSInterop;
 
 @inject IReportService Service
 @inject ISetupUserService userService
 @inject IProjectService projectService
 @inject HttpInterceptorService Interceptor
+@inject IJSRuntime JSRuntime
 
 @implements IDisposable
 
@@ -76,6 +78,10 @@
     <button type="submit" class="btn btn-success">
         Submit
     </button>
+
+    <button type="button" class="btn btn-success" @onclick="GetExcel">
+        Excel
+    </button>
 </EditForm>
 
 @if (items != null)
@@ -132,6 +138,20 @@
     {
         using var response = await Service.GetHoursEntered(para);
         items = await response.Content.ReadFromJsonAsync<List<HoursEnteredDto>>();
+    }
+
+    private async Task GetExcel()
+    {
+        using var response = await Service.GetHoursEnteredExcel(para);
+
+        byte[] byteArray = await response.Content.ReadAsByteArrayAsync();
+
+        await JSRuntime.InvokeVoidAsync("download", new
+        {
+            ByteArray = byteArray,
+            FileName = "HoursEnteredReport.xlsx",
+            ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        });
     }
 
     public void Dispose() => Interceptor.DisposeEvent();
