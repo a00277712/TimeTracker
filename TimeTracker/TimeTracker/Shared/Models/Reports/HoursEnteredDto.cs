@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TimeTracker.Shared.Models
+namespace TimeTracker.Shared.Models.Reports
 {
     public class HoursEnteredDto
     {

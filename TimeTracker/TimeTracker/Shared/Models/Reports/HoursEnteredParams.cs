@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace TimeTracker.Shared.Models
+namespace TimeTracker.Shared.Models.Reports
 {
     public class HoursEnteredParams
     {

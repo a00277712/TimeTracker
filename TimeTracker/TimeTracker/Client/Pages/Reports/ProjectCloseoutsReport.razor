@@ -1,0 +1,150 @@
+﻿@page "/report/project-closeouts"
+
+@using System.Globalization
+@using TimeTracker.Shared.Models.Reports
+
+@inject IReportService Service
+@inject IProjectService projectService
+@inject HttpInterceptorService Interceptor
+
+@implements IDisposable
+
+<h3>Project Closeouts Report</h3>
+
+<EditForm Model="@para" OnValidSubmit="@Get">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <div>
+            <label>Start Date:</label>
+            <div>
+                <InputDate type="date" @bind-Value="para.StartDate" />
+                <ValidationMessage For="@(() => para.StartDate)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>End Date:</label>
+            <div>
+                <InputDate type="date" @bind-Value="para.EndDate" />
+                <ValidationMessage For="@(() => para.EndDate)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Client:</label>
+            <div>
+                <InputText @bind-Value="para.Client" />
+                <ValidationMessage For="@(() => para.Client)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <label>Project Title:</label>
+            <div>
+                <InputSelect @bind-Value="para.ProjectTitle">
+                    <option>All</option>
+                    @if (projectsList != null)
+                    {
+                        @foreach (var item in projectsList)
+                        {
+                            <option value="@item.Title">@item.Code - @item.Title</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => para.ProjectTitle)" />
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Submit
+    </button>
+</EditForm>
+
+@if (items != null)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Project Code</th>
+                <th>Project Title</th>
+                <th>Closeout Reason</th>
+                <th>Commercial Milestones Complete</th>
+                <th>Deliverables Complete</th>
+                <th>Customer Data Management</th>
+                <th>Sales Learnings</th>
+                <th>Ops learnings</th>
+                <th>Learning Actions</th>
+                <th>Follow Up Actions</th>
+                <th>Commercial Score</th>
+                <th>Operational Score</th>
+                <th>Business Development Score</th>
+                <th>Reputational Score</th>
+                <th>Resource Profile Score</th>
+                <th>Project Score</th>
+                <th>Created By</th>
+                <th>Date Created</th>
+                <th>Customer Feedback Received</th>
+                <th>Customer Feedback</th>
+                <th>Data Purged</th>
+                <th>Case Study</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr>
+                    <td>@item.Code</td>
+                    <td>@item.Title</td>
+                    <td>@item.CloseoutReason</td>
+                    <td>@item.CommercialMilestonesComplete</td>
+                    <td>@item.DeliverablesComplete</td>
+                    <td>@item.CustomerDataManagement</td>
+                    <td>@item.SalesLearnings</td>
+                    <td>@item.Opslearnings</td>
+                    <td>@item.LearningActions</td>
+                    <td>@item.FollowUpActions</td>
+                    <td>@item.CommercialScore</td>
+                    <td>@item.OperationalScore</td>
+                    <td>@item.BusinessDevelopmentScore</td>
+                    <td>@item.ReputationalScore</td>
+                    <td>@item.ResourceProfileScore</td>
+                    <td>@item.ProjectScore</td>
+                    <td>@item.CreatedBy</td>
+                    <td>@item.DateCreated.ToString("dd/MM/yyyy", CultureInfo.CurrentCulture)</td>
+                    <td>@item.Feedback</td>
+                    <td>@item.CustomerFeedback</td>
+                    <td>@item.DataPurged</td>
+                    <td>@item.CaseStudy</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ProjectCloseoutsParams para = new ProjectCloseoutsParams();
+    private List<ProjectCloseoutsDto> items;
+    private ProjectDto[] projectsList;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Interceptor.RegisterEvent();
+        projectsList = await projectService.Get();
+    }
+
+    private async Task Get()
+    {
+        using var response = await Service.GetProjectCloseouts(para);
+        items = await response.Content.ReadFromJsonAsync<List<ProjectCloseoutsDto>>();
+    }
+
+    public void Dispose() => Interceptor.DisposeEvent();
+}

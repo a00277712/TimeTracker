@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Shared.Models
+﻿namespace TimeTracker.Shared.Models.Reports
 {
     public class MonthSummaryByWeekDto
     {

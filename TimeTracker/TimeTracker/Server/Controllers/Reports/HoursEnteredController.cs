@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using TimeTracker.Server.Models;
-using TimeTracker.Shared.Models;
+using TimeTracker.Shared.Models.Reports;
 
 namespace TimeTracker.Server.Controllers.Reports
 {

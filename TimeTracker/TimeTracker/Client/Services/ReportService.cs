@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using TimeTracker.Shared.Models;
+using TimeTracker.Shared.Models.Reports;
 
 namespace TimeTracker.Client.Services
 {
@@ -27,6 +27,11 @@ namespace TimeTracker.Client.Services
         public async Task<HttpResponseMessage> GetMonthSummaryByWeek(MonthSummaryParams para)
         {
             return await http.PostAsJsonAsync("api/reports/month-summary/week", para);
+        }
+
+        public async Task<HttpResponseMessage> GetProjectCloseouts(ProjectCloseoutsParams para)
+        {
+            return await http.PostAsJsonAsync("api/reports/project-closeouts", para);
         }
     }
 }

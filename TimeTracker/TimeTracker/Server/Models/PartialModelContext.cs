@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TimeTracker.Shared.Models;
+using TimeTracker.Shared.Models.Reports;
 
 namespace TimeTracker.Server.Models
 {
